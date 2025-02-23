@@ -1,21 +1,39 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Security.Policy;
 
 namespace Q_Manage.Models
 {
-    public class QmanageDbContext : IdentityDbContext<IdentityUser, IdentityRole, string>
+    public class QmanageDbContext : IdentityDbContext<ApplicationUser, IdentityRole, string>
     {
         public QmanageDbContext(DbContextOptions<QmanageDbContext> options)
             : base(options)
         {
         }
 
+        public DbSet<Proyecto> Proyectos { get; set; }
+        public DbSet<EstadoProyecto> EstadoProyectos { get; set; }
+        public DbSet<Pago> Pagos { get; set; }
+        public DbSet<EstadoPago> EstadoPagos {  get; set; }
+        public DbSet<Equipo> Equipos { get; set; } 
+        public DbSet<Comentario> Comentarios { get; set; }
+        public DbSet<EmpleadoPorEquipo> EmpleadoPorEquipos { get; set; }
+        public DbSet<ProyectosPorEquipo> ProyectosPorEquipos { get; set; }
 
-        public DbSet<Proyectos> Proyectos { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);
+
+            builder.Entity<Pago>()
+                   .Property(p => p.Monto)
+                   .HasPrecision(18, 2);
+
+            builder.Entity<Comentario>()
+                   .HasOne(c => c.Proyecto)
+                   .WithMany(p => p.Comentarios)
+                   .OnDelete(DeleteBehavior.Restrict);
 
             // 🔹 Definir roles por defecto
             string adminRoleId = Guid.NewGuid().ToString();
@@ -28,7 +46,7 @@ namespace Q_Manage.Models
             );
 
             // 🔹 Crear usuario administrador por defecto
-            var adminUser = new IdentityUser
+            var adminUser = new ApplicationUser
             {
                 Id = adminUserId,
                 UserName = "admin",
@@ -39,36 +57,16 @@ namespace Q_Manage.Models
                 SecurityStamp = Guid.NewGuid().ToString()
             };
 
-            // 🔹 Establecer la contraseña de forma segura
-            var passwordHasher = new PasswordHasher<IdentityUser>();
+            var passwordHasher = new PasswordHasher<ApplicationUser>();
             adminUser.PasswordHash = passwordHasher.HashPassword(adminUser, "Admin123!");
 
-            builder.Entity<IdentityUser>().HasData(adminUser);
+            builder.Entity<ApplicationUser>().HasData(adminUser);
 
             // 🔹 Asignar el usuario al rol de administrador
             builder.Entity<IdentityUserRole<string>>().HasData(
                 new IdentityUserRole<string> { UserId = adminUserId, RoleId = adminRoleId }
             );
 
-            builder.Entity<UsuarioProyecto>()
-               .HasKey(up => new { up.UsuarioId, up.ProyectoId });
-
-            builder.Entity<UsuarioProyecto>()
-                .HasOne(up => up.Usuario)
-                .WithMany()
-                .HasForeignKey(up => up.UsuarioId);
-
-            builder.Entity<UsuarioProyecto>()
-                .HasOne(up => up.Proyecto)
-                .WithMany(p => p.UsuarioProyectos)
-                .HasForeignKey(up => up.ProyectoId);
-
         }
-
-        
-       
-
-     
-
     }
 }

@@ -3,20 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Q_Manage.Models;
 
 #nullable disable
 
-namespace Q_Manage.Data.Migrations
+namespace Q_Manage.Migrations
 {
     [DbContext(typeof(QmanageDbContext))]
-    [Migration("20250223002236_usuarioproy")]
-    partial class usuarioproy
+    partial class QmanageDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -54,13 +51,13 @@ namespace Q_Manage.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "3ded7c7e-e29c-4a9f-baaa-7977d53efb1f",
+                            Id = "e4b901d1-8086-4688-97ae-6b9737378200",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "89a2c31b-31fb-401d-b7c0-31256aebcb13",
+                            Id = "060b0758-c42f-480e-9840-440e3d3c97ca",
                             Name = "Usuario",
                             NormalizedName = "USUARIO"
                         });
@@ -157,8 +154,8 @@ namespace Q_Manage.Data.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "0b00167e-4a7b-4d9e-881e-e7e4313d4371",
-                            RoleId = "3ded7c7e-e29c-4a9f-baaa-7977d53efb1f"
+                            UserId = "1a94fcb8-49c5-484e-b1dc-eb4a6e7fb642",
+                            RoleId = "e4b901d1-8086-4688-97ae-6b9737378200"
                         });
                 });
 
@@ -250,56 +247,229 @@ namespace Q_Manage.Data.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "0b00167e-4a7b-4d9e-881e-e7e4313d4371",
+                            Id = "1a94fcb8-49c5-484e-b1dc-eb4a6e7fb642",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "1e7c11ca-431f-4782-81f8-7f07b90bbb59",
+                            ConcurrencyStamp = "3eb85098-f72f-439a-abaf-e4770a846999",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN",
-                            PasswordHash = "AQAAAAIAAYagAAAAEIozJCovNU1FQGna2Q2TDS6pz7+l9mQpiahh7GOvTNctM//RC5Ury/4fhBj3+E1FiQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEB4m/o3kVSR7tDeLGBFMYYmeNbZV8BSlU8/A/VzR6tDdnhR2BQ8vJhFy5oBQDra+GA==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "c5c92033-69e3-415c-aa98-6dc2570f85ef",
+                            SecurityStamp = "250a60e8-bfc9-4be4-863a-939bb3190d90",
                             TwoFactorEnabled = false,
                             UserName = "admin"
                         });
                 });
 
-            modelBuilder.Entity("Q_Manage.Models.Proyectos", b =>
+            modelBuilder.Entity("Q_Manage.Models.Comentario", b =>
                 {
-                    b.Property<int>("ID")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int");
 
-                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("ID"));
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("Descripcion")
+                    b.Property<string>("Contenido")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("ProyectoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UsuarioId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProyectoId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("Comentarios");
+                });
+
+            modelBuilder.Entity("Q_Manage.Models.EmpleadoPorEquipo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int?>("EmpleadoPorEquipoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EquipoId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UsuarioId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EmpleadoPorEquipoId");
+
+                    b.HasIndex("EquipoId");
+
+                    b.HasIndex("UsuarioId");
+
+                    b.ToTable("EmpleadoPorEquipos");
+                });
+
+            modelBuilder.Entity("Q_Manage.Models.Equipo", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("Equipos");
+                });
+
+            modelBuilder.Entity("Q_Manage.Models.EstadoPago", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
                     b.Property<string>("Nombre")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("ID");
+                    b.HasKey("Id");
+
+                    b.ToTable("EstadoPagos");
+                });
+
+            modelBuilder.Entity("Q_Manage.Models.EstadoProyecto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EstadoProyectos");
+                });
+
+            modelBuilder.Entity("Q_Manage.Models.Pago", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EstadoPagoId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaLimite")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaPago")
+                        .HasColumnType("datetime2");
+
+                    b.Property<decimal>("Monto")
+                        .HasPrecision(18, 2)
+                        .HasColumnType("decimal(18,2)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EstadoPagoId");
+
+                    b.ToTable("Pagos");
+                });
+
+            modelBuilder.Entity("Q_Manage.Models.Proyecto", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Descripcion")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EstadoPagoId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("EstadoProyectoId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("FechaFinalizacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("FechaInicio")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UsuarioId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EstadoPagoId");
+
+                    b.HasIndex("EstadoProyectoId");
+
+                    b.HasIndex("UsuarioId");
 
                     b.ToTable("Proyectos");
                 });
 
-            modelBuilder.Entity("Q_Manage.Models.UsuarioProyecto", b =>
+            modelBuilder.Entity("Q_Manage.Models.ProyectosPorEquipo", b =>
                 {
-                    b.Property<string>("UsuarioId")
-                        .HasColumnType("nvarchar(450)");
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<int>("EquipoId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ProyectoId")
                         .HasColumnType("int");
 
-                    b.HasKey("UsuarioId", "ProyectoId");
+                    b.HasKey("Id");
+
+                    b.HasIndex("EquipoId");
 
                     b.HasIndex("ProyectoId");
 
-                    b.ToTable("UsuarioProyecto");
+                    b.ToTable("ProyectosPorEquipos");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -353,16 +523,16 @@ namespace Q_Manage.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Q_Manage.Models.UsuarioProyecto", b =>
+            modelBuilder.Entity("Q_Manage.Models.Comentario", b =>
                 {
-                    b.HasOne("Q_Manage.Models.Proyectos", "Proyecto")
-                        .WithMany("UsuarioProyectos")
+                    b.HasOne("Q_Manage.Models.Proyecto", "Proyecto")
+                        .WithMany("Comentarios")
                         .HasForeignKey("ProyectoId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("Q_Manage.Models.ApplicationUser", "Usuario")
-                        .WithMany("UsuarioProyectos")
+                        .WithMany("Comentarios")
                         .HasForeignKey("UsuarioId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -372,14 +542,118 @@ namespace Q_Manage.Data.Migrations
                     b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("Q_Manage.Models.ApplicationUser", b =>
+            modelBuilder.Entity("Q_Manage.Models.EmpleadoPorEquipo", b =>
                 {
-                    b.Navigation("UsuarioProyectos");
+                    b.HasOne("Q_Manage.Models.EmpleadoPorEquipo", null)
+                        .WithMany("EmpleadoPorEquipos")
+                        .HasForeignKey("EmpleadoPorEquipoId");
+
+                    b.HasOne("Q_Manage.Models.Equipo", "Equipo")
+                        .WithMany("empleadorPorEquipos")
+                        .HasForeignKey("EquipoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Q_Manage.Models.ApplicationUser", "Usuario")
+                        .WithMany()
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Equipo");
+
+                    b.Navigation("Usuario");
                 });
 
-            modelBuilder.Entity("Q_Manage.Models.Proyectos", b =>
+            modelBuilder.Entity("Q_Manage.Models.Pago", b =>
                 {
-                    b.Navigation("UsuarioProyectos");
+                    b.HasOne("Q_Manage.Models.EstadoPago", "EstadoPago")
+                        .WithMany("Pagos")
+                        .HasForeignKey("EstadoPagoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EstadoPago");
+                });
+
+            modelBuilder.Entity("Q_Manage.Models.Proyecto", b =>
+                {
+                    b.HasOne("Q_Manage.Models.EstadoPago", "EstadoPago")
+                        .WithMany("Proyectos")
+                        .HasForeignKey("EstadoPagoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Q_Manage.Models.EstadoProyecto", "EstadoProyecto")
+                        .WithMany("Proyectos")
+                        .HasForeignKey("EstadoProyectoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Q_Manage.Models.ApplicationUser", "Usuario")
+                        .WithMany("Proyectos")
+                        .HasForeignKey("UsuarioId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EstadoPago");
+
+                    b.Navigation("EstadoProyecto");
+
+                    b.Navigation("Usuario");
+                });
+
+            modelBuilder.Entity("Q_Manage.Models.ProyectosPorEquipo", b =>
+                {
+                    b.HasOne("Q_Manage.Models.Equipo", "Equipo")
+                        .WithMany()
+                        .HasForeignKey("EquipoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Q_Manage.Models.Proyecto", "Proyecto")
+                        .WithMany()
+                        .HasForeignKey("ProyectoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Equipo");
+
+                    b.Navigation("Proyecto");
+                });
+
+            modelBuilder.Entity("Q_Manage.Models.ApplicationUser", b =>
+                {
+                    b.Navigation("Comentarios");
+
+                    b.Navigation("Proyectos");
+                });
+
+            modelBuilder.Entity("Q_Manage.Models.EmpleadoPorEquipo", b =>
+                {
+                    b.Navigation("EmpleadoPorEquipos");
+                });
+
+            modelBuilder.Entity("Q_Manage.Models.Equipo", b =>
+                {
+                    b.Navigation("empleadorPorEquipos");
+                });
+
+            modelBuilder.Entity("Q_Manage.Models.EstadoPago", b =>
+                {
+                    b.Navigation("Pagos");
+
+                    b.Navigation("Proyectos");
+                });
+
+            modelBuilder.Entity("Q_Manage.Models.EstadoProyecto", b =>
+                {
+                    b.Navigation("Proyectos");
+                });
+
+            modelBuilder.Entity("Q_Manage.Models.Proyecto", b =>
+                {
+                    b.Navigation("Comentarios");
                 });
 #pragma warning restore 612, 618
         }

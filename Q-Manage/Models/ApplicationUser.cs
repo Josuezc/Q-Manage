@@ -5,6 +5,8 @@ namespace Q_Manage.Models
 {
     public class ApplicationUser : IdentityUser
     {
-        public List<UsuarioProyecto> UsuarioProyectos { get; set; }
+        public List<Comentario> Comentarios { get; set; } = new List<Comentario>();
+
+        public List<Proyecto> Proyectos { get; set; } = new List<Proyecto>();
     }
 }
