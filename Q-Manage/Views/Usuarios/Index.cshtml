@@ -1,4 +1,4 @@
-﻿@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityUser>
+﻿@model IEnumerable<Q_Manage.Models.ApplicationUser>
 
 @{
     ViewData["Title"] = "Usuarios";
@@ -21,7 +21,6 @@
             <tr>
                 <td>@usuario.Email</td>
                 <td>@usuario.UserName</td>
-
                 <td>
                     <a asp-action="Editar" asp-route-id="@usuario.Id" class="btn btn-warning">Editar</a>
                     <a asp-action="Eliminar" asp-route-id="@usuario.Id" class="btn btn-danger">Eliminar</a>
