@@ -49,8 +49,8 @@ namespace Q_Manage.Models
             var adminUser = new ApplicationUser
             {
                 Id = adminUserId,
-                UserName = "admin",
-                NormalizedUserName = "ADMIN",
+                UserName = "admin@gmail.com",
+                NormalizedUserName = "ADMIN@GMAIL.COM",
                 Email = "admin@gmail.com",
                 NormalizedEmail = "ADMIN@GMAIL.COM",
                 EmailConfirmed = true,

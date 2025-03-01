@@ -7,7 +7,7 @@
 <h2>¿Está seguro de eliminar este usuario?</h2>
 <p>Email: @Model.Email</p>
 
-<form asp-action="EliminarConfirmado" method="post">
+<form asp-action="Delete" method="post">
     <input type="hidden" asp-for="Id" />
     <button type="submit" class="btn btn-danger">Eliminar</button>
     <a asp-action="Index" class="btn btn-secondary">Cancelar</a>

@@ -3,28 +3,76 @@
 @{
     ViewData["Title"] = "Usuarios";
 }
-
+@{
+    var proyectosUsuari = ViewData["ProyectosUsuarios"] as List<string>;
+    var proyectosUsuarios = ViewData["ProyectosUsuarios"] as Dictionary<string, List<string>>;
+}
 <h2>Lista de Usuarios</h2>
-<a asp-action="Crear" class="btn btn-primary">Nuevo Usuario</a>
-
+@if (User.IsInRole("Admin"))
+{
+    <a asp-action="Create" class="btn btn-primary">Nuevo Usuario</a>
+}
 <table class="table">
     <thead>
         <tr>
-            <th>Email</th>
-            <th>Nombre de Usuario</th>
-            <th>Acciones</th>
+            <th>Usuario</th>            
+            <th>Teléfono</th>
+            <th>Proyectos</th>
+            @if (User.IsInRole("Admin"))
+            {
+                <th>Acciones</th>
+            }
         </tr>
     </thead>
     <tbody>
         @foreach (var usuario in Model)
         {
             <tr>
-                <td>@usuario.Email</td>
                 <td>@usuario.UserName</td>
+                <td>@usuario.PhoneNumber</td>
+                @if (User.IsInRole("Admin"))
+                {
                 <td>
-                    <a asp-action="Editar" asp-route-id="@usuario.Id" class="btn btn-warning">Editar</a>
-                    <a asp-action="Eliminar" asp-route-id="@usuario.Id" class="btn btn-danger">Eliminar</a>
+                    @if (proyectosUsuarios != null && proyectosUsuarios.ContainsKey(usuario.Id) && proyectosUsuarios[usuario.Id].Any())
+                    {
+                        <ul>
+                            @foreach (var proyecto in proyectosUsuarios[usuario.Id])
+                            {
+                                <li>@proyecto</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>No hay proyectos asignados.</p>
+                    }
+                </td>}
+                <td>
+                    @if (proyectosUsuari != null && proyectosUsuari.Any())
+                    {
+                        <ul>
+                            @foreach (var proyecto in proyectosUsuari)
+                            {
+                                <li>@proyecto</li>
+                            }
+                        </ul>
+                    }
+                    else
+                    {
+                        <p>No hay proyectos asignados.</p>
+                    }
+
                 </td>
+               
+                    <td>
+
+                    <a asp-action="Edit" asp-route-id="@usuario.Id" class="btn btn-warning">Editar</a>
+                    @if (User.IsInRole("Admin"))
+                    {
+                    <a asp-action="Delete" asp-route-id="@usuario.Id" class="btn btn-danger">Eliminar</a>
+                    }
+                </td>
+               
             </tr>
         }
     </tbody>

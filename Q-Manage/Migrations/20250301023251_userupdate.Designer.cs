@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Q_Manage.Models;
 
@@ -11,9 +12,11 @@ using Q_Manage.Models;
 namespace Q_Manage.Migrations
 {
     [DbContext(typeof(QmanageDbContext))]
-    partial class QmanageDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250301023251_userupdate")]
+    partial class userupdate
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
