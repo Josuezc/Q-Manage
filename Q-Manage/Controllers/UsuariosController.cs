@@ -103,7 +103,7 @@ namespace Q_Manage.Controllers
                 if (!passwordRegex.IsMatch(password))
                 {
                     ModelState.AddModelError("password", "La contraseña debe tener al menos 6 caracteres, incluyendo una mayúscula, una minúscula, un número y un símbolo.");
-                   // return View(user);
+                  
                 }
                 var emailExist = await _userManager.FindByEmailAsync(user.Email);
                 if (emailExist != null)
@@ -119,7 +119,7 @@ namespace Q_Manage.Controllers
                 if (string.IsNullOrWhiteSpace(user.Email) || !emailRegex.IsMatch(user.Email))
                 {
                     ModelState.AddModelError("Email", "Debe ingresar un correo electrónico válido.");
-                   //return View(user);
+                   
                 }
 
                 if (!ModelState.IsValid)

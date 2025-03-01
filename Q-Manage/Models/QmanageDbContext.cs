@@ -38,11 +38,13 @@ namespace Q_Manage.Models
             // 🔹 Definir roles por defecto
             string adminRoleId = Guid.NewGuid().ToString();
             string userRoleId = Guid.NewGuid().ToString();
+            string clientRoleId = Guid.NewGuid().ToString();
             string adminUserId = Guid.NewGuid().ToString();
 
             builder.Entity<IdentityRole>().HasData(
                 new IdentityRole { Id = adminRoleId, Name = "Admin", NormalizedName = "ADMIN" },
-                new IdentityRole { Id = userRoleId, Name = "Usuario", NormalizedName = "USUARIO" }
+                new IdentityRole { Id = userRoleId, Name = "User", NormalizedName = "User" },
+                new IdentityRole { Id = clientRoleId, Name = "Client", NormalizedName = "CLIENT" }
             );
 
             // 🔹 Crear usuario administrador por defecto
