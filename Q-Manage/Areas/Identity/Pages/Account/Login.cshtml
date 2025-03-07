@@ -1,0 +1,70 @@
+﻿@page
+@model LoginModel
+
+@{
+    ViewData["Title"] = "Iniciar Sesión";
+}
+
+<div class="d-flex justify-content-center align-items-center min-vh-100">
+    <div class="card p-4 shadow-lg rounded-4" style="width: 400px; background: linear-gradient(to right, #1e3c72, #2a5298); color: white;">
+        <div class="text-center">
+            <h2 class="fw-bold">🔑 Iniciar Sesión</h2>
+            <hr class="bg-light" />
+        </div>
+
+        <form id="account" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger text-center" role="alert"></div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Email" class="form-control bg-light text-dark" autocomplete="username" aria-required="true" placeholder="name@example.com" />
+                <label asp-for="Input.Email" class="form-label text-dark">Correo Electrónico</label>
+                <span asp-validation-for="Input.Email" class="text-danger"></span>
+            </div>
+
+            <div class="form-floating mb-3">
+                <input asp-for="Input.Password" type="password" class="form-control bg-light text-dark" autocomplete="current-password" aria-required="true" placeholder="password" />
+                <label asp-for="Input.Password" class="form-label text-dark">Contraseña</label>
+                <span asp-validation-for="Input.Password" class="text-danger"></span>
+            </div>
+
+            <div class="form-check mb-3">
+                <input class="form-check-input" asp-for="Input.RememberMe" />
+                <label asp-for="Input.RememberMe" class="form-check-label">Recordarme</label>
+            </div>
+
+            <button id="login-submit" type="submit" class="w-100 btn btn-lg btn-light text-dark fw-bold shadow">Iniciar Sesión</button>
+        </form>
+
+        <div class="mt-3 text-center">
+            <a id="forgot-password" asp-page="./ForgotPassword" class="text-light">¿Olvidaste tu contraseña?</a>
+            <br>
+            <a asp-page="./Register" asp-route-returnUrl="@Model.ReturnUrl" class="text-light">📌 Registrarse</a>
+            <br>
+            <a id="resend-confirmation" asp-page="./ResendEmailConfirmation" class="text-light">Reenviar confirmación</a>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<style>
+    body {
+        background: linear-gradient(to right, #141e30, #243b55);
+    }
+
+    .card {
+        animation: fadeIn 1s ease-in-out;
+    }
+
+    .btn-light:hover {
+        background-color: #f8f9fa;
+        color: #1e3c72;
+        transform: scale(1.05);
+        transition: all 0.3s ease-in-out;
+    }
+
+   
+       
+</style>
