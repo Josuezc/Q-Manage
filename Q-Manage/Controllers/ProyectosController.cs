@@ -1,0 +1,163 @@
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Q_Manage.Models;
+using System;
+using System.Linq;
+using System.Threading.Tasks;
+
+public class ProyectosController : Controller
+{
+    private readonly QmanageDbContext _context;
+    private readonly UserManager<ApplicationUser> _userManager;
+
+    public ProyectosController(QmanageDbContext context, UserManager<ApplicationUser> userManager)
+    {
+        _context = context;
+        _userManager = userManager;
+    }
+
+    private async Task<List<ApplicationUser>> ObtenerUsuariosPorRol(string roleName)
+    {
+        var role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == roleName);
+        if (role == null) return new List<ApplicationUser>();
+
+        var userIds = await _context.UserRoles
+            .Where(ur => ur.RoleId == role.Id)
+            .Select(ur => ur.UserId)
+            .ToListAsync();
+
+        return await _context.Users
+            .Where(u => userIds.Contains(u.Id))
+            .ToListAsync();
+    }
+
+    public async Task<IActionResult> Index()
+    {
+        var proyectos = await _context.Proyectos
+            .Include(p => p.EstadoPago)
+            .Include(p => p.EstadoProyecto)
+            .Include(p => p.Usuario)
+            .ToListAsync();
+
+        return View(proyectos);
+    }
+
+    public async Task<IActionResult> Details(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var proyecto = await _context.Proyectos
+            .Include(p => p.EstadoPago)
+            .Include(p => p.EstadoProyecto)
+            .Include(p => p.Comentarios)
+            .ThenInclude(c => c.Usuario)
+            .Include(p => p.Usuario)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+        if (proyecto == null) return NotFound();
+
+        return View(proyecto);
+    }
+
+    public async Task<IActionResult> Create()
+    {
+        ViewBag.EstadosPago = await _context.EstadoPagos.ToListAsync();
+        ViewBag.EstadosProyecto = await _context.EstadoProyectos.ToListAsync();
+        ViewBag.Clientes = await ObtenerUsuariosPorRol("Client"); // Cargar solo usuarios con rol Cliente
+
+        return View();
+    }
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Create([Bind("Nombre,Descripcion,FechaInicio,FechaFinalizacion,EstadoPagoId,EstadoProyectoId,UsuarioId")] Proyecto proyecto)
+    {
+        if (!ModelState.IsValid)
+        {
+            _context.Add(proyecto);
+            await _context.SaveChangesAsync();
+            return RedirectToAction(nameof(Index));
+        }
+
+        ViewBag.EstadosPago = await _context.EstadoPagos.ToListAsync();
+        ViewBag.EstadosProyecto = await _context.EstadoProyectos.ToListAsync();
+        ViewBag.Clientes = await ObtenerUsuariosPorRol("Client");
+
+        return View(proyecto);
+    }
+
+
+    public async Task<IActionResult> Edit(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var proyecto = await _context.Proyectos.FindAsync(id);
+        if (proyecto == null) return NotFound();
+
+        ViewBag.EstadosPago = await _context.EstadoPagos.ToListAsync();
+        ViewBag.EstadosProyecto = await _context.EstadoProyectos.ToListAsync();
+        ViewBag.Clientes = await ObtenerUsuariosPorRol("Client");
+
+        return View(proyecto);
+    }
+
+
+    [HttpPost]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,FechaInicio,FechaFinalizacion,EstadoPagoId,EstadoProyectoId,UsuarioId")] Proyecto proyecto)
+    {
+        if (id != proyecto.Id) return NotFound();
+
+        if (!ModelState.IsValid)
+        {
+            try
+            {
+                _context.Update(proyecto);
+                await _context.SaveChangesAsync();
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!_context.Proyectos.Any(e => e.Id == proyecto.Id))
+                {
+                    return NotFound();
+                }
+                throw;
+            }
+        }
+
+        ViewBag.EstadosPago = await _context.EstadoPagos.ToListAsync();
+        ViewBag.EstadosProyecto = await _context.EstadoProyectos.ToListAsync();
+        ViewBag.Clientes = await ObtenerUsuariosPorRol("Client");
+
+        return View(proyecto);
+    }
+
+    public async Task<IActionResult> Delete(int? id)
+    {
+        if (id == null) return NotFound();
+
+        var proyecto = await _context.Proyectos
+            .Include(p => p.EstadoPago)
+            .Include(p => p.EstadoProyecto)
+            .FirstOrDefaultAsync(m => m.Id == id);
+
+        if (proyecto == null) return NotFound();
+
+        return View(proyecto);
+    }
+
+    [HttpPost, ActionName("Delete")]
+    [ValidateAntiForgeryToken]
+    public async Task<IActionResult> DeleteConfirmed(int id)
+    {
+        var proyecto = await _context.Proyectos.FindAsync(id);
+        if (proyecto != null)
+        {
+            _context.Proyectos.Remove(proyecto);
+            await _context.SaveChangesAsync();
+        }
+        return RedirectToAction(nameof(Index));
+    }
+}

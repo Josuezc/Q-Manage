@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -12,11 +13,47 @@ namespace Q_Manage.Controllers
     public class EquiposController : Controller
     {
         private readonly QmanageDbContext _context;
+        private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
 
-        public EquiposController(QmanageDbContext context)
+        public EquiposController(QmanageDbContext context, UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
         {
             _context = context;
+            _userManager = userManager;
+            _roleManager = roleManager;
         }
+
+        private async Task<List<ApplicationUser>> ObtenerUsuariosParaEquipo(string roleName, int? equipoId = null)
+        {
+            var role = await _roleManager.FindByNameAsync(roleName);
+            if (role == null) return new List<ApplicationUser>();
+
+            var userIds = await _context.UserRoles
+                .Where(ur => ur.RoleId == role.Id)
+                .Select(ur => ur.UserId)
+                .ToListAsync();
+
+            var empleadosConDosEquipos = _context.EmpleadoPorEquipos
+                .GroupBy(e => e.UsuarioId)
+                .Where(g => g.Count() >= 2)
+                .Select(g => g.Key)
+                .ToHashSet();
+
+            var empleadosEnEquipoActual = new HashSet<string>();
+            if (equipoId.HasValue)
+            {
+                empleadosEnEquipoActual = _context.EmpleadoPorEquipos
+                    .Where(e => e.EquipoId == equipoId.Value)
+                    .Select(e => e.UsuarioId)
+                    .ToHashSet();
+            }
+
+            return await _userManager.Users
+                .Where(u => userIds.Contains(u.Id) && (!empleadosConDosEquipos.Contains(u.Id) || empleadosEnEquipoActual.Contains(u.Id)))
+                .ToListAsync();
+        }
+
+
 
         public async Task<IActionResult> Index()
         {
@@ -89,9 +126,9 @@ namespace Q_Manage.Controllers
 
 
 
-        public IActionResult Create()
+        public async Task<IActionResult> Create()
         {
-            ViewBag.Usuarios = _context.Users.ToList();
+            ViewBag.Usuarios = await ObtenerUsuariosParaEquipo("User");
             return View();
         }
 
@@ -118,7 +155,7 @@ namespace Q_Manage.Controllers
                 return RedirectToAction(nameof(Index));
             }
 
-            ViewBag.Usuarios = _context.Users.ToList();
+            ViewBag.Usuarios = await ObtenerUsuariosParaEquipo("User");
             return View(equipo);
         }
 
@@ -133,9 +170,10 @@ namespace Q_Manage.Controllers
                 return NotFound();
             }
 
-            ViewBag.Usuarios = _context.Users.ToList();
+            ViewBag.Usuarios = await ObtenerUsuariosParaEquipo("User", id);
             return View(equipo);
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -191,7 +229,12 @@ namespace Q_Manage.Controllers
             }
 
             var equipo = await _context.Equipos
+                .Include(e => e.ProyectosPorEquipos) 
+                    .ThenInclude(pe => pe.Proyecto)  
+                .Include(e => e.empleadorPorEquipos) 
+                    .ThenInclude(ep => ep.Usuario)  
                 .FirstOrDefaultAsync(m => m.Id == id);
+
             if (equipo == null)
             {
                 return NotFound();
@@ -199,6 +242,7 @@ namespace Q_Manage.Controllers
 
             return View(equipo);
         }
+
 
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]

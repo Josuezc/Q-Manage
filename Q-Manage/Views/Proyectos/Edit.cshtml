@@ -1,0 +1,75 @@
+﻿@model Q_Manage.Models.Proyecto
+
+@{
+    ViewData["Title"] = "Editar Proyecto";
+}
+
+<div class="container mt-4 d-flex justify-content-center">
+    <div class="card bg-dark text-light p-4 shadow-lg" style="width: 40rem;">
+        <div class="card-header text-center">
+            <h2>✏️ Editar Proyecto</h2>
+        </div>
+
+        <div class="card-body">
+            <form asp-action="Edit">
+                <input type="hidden" asp-for="Id" />
+
+                <div class="mb-3">
+                    <label asp-for="Nombre" class="form-label">📌 Nombre</label>
+                    <input asp-for="Nombre" class="form-control bg-dark text-light border-secondary" required />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="Descripcion" class="form-label">📝 Descripción</label>
+                    <textarea asp-for="Descripcion" class="form-control bg-dark text-light border-secondary" required></textarea>
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="FechaInicio" class="form-label">📅 Fecha de Inicio</label>
+                    <input asp-for="FechaInicio" type="date" class="form-control bg-dark text-light border-secondary" required />
+                </div>
+
+                <div class="mb-3">
+                    <label asp-for="FechaFinalizacion" class="form-label">📅 Fecha de Finalización</label>
+                    <input asp-for="FechaFinalizacion" type="date" class="form-control bg-dark text-light border-secondary" />
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">💰 Estado de Pago</label>
+                    <select asp-for="EstadoPagoId" class="form-select bg-dark text-light border-secondary">
+                        @foreach (var pago in ViewBag.EstadosPago)
+                        {
+                            <option value="@pago.Id" selected="@(pago.Id == Model.EstadoPagoId ? "selected" : null)">@pago.Nombre</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">🛠 Estado del Proyecto</label>
+                    <select asp-for="EstadoProyectoId" class="form-select bg-dark text-light border-secondary">
+                        @foreach (var estado in ViewBag.EstadosProyecto)
+                        {
+                            <option value="@estado.Id" selected="@(estado.Id == Model.EstadoProyectoId ? "selected" : null)">@estado.Nombre</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="mb-3">
+                    <label class="form-label">👤 Cliente Asignado</label>
+                    <select asp-for="UsuarioId" class="form-select bg-dark text-light border-secondary">
+                        <option value="">-- Seleccionar Cliente --</option>
+                        @foreach (var cliente in ViewBag.Clientes)
+                        {
+                            <option value="@cliente.Id" selected="@(cliente.Id == Model.UsuarioId ? "selected" : null)">@cliente.UserName - 📧 @cliente.Email</option>
+                        }
+                    </select>
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success">💾 Guardar cambios</button>
+                    <a asp-action="Index" class="btn btn-secondary">↩️ Volver</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

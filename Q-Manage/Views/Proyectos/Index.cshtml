@@ -1,0 +1,73 @@
+﻿@model IEnumerable<Q_Manage.Models.Proyecto>
+
+@{
+    ViewData["Title"] = "Proyectos";
+}
+
+<div class="container mt-4">
+    <h2 class="text-light text-center">
+        📂 Gestión de Proyectos
+    </h2>
+    <div class="text-end mb-3">
+        <a asp-action="Create" class="btn btn-success">
+            ➕ Nuevo Proyecto
+        </a>
+    </div>
+
+    <div class="row">
+        @foreach (var proyecto in Model)
+        {
+            <div class="col-md-4 mb-3">
+                <div class="card bg-dark text-light shadow-lg">
+                    <div class="card-body">
+                        <h5 class="card-title">📌 @proyecto.Nombre</h5>
+                        <p class="card-text">📝 @proyecto.Descripcion</p>
+
+                        <p>
+                            <strong>🛠 Estado:</strong>
+                            <span class="badge bg-primary">@proyecto.EstadoProyecto.Nombre</span>
+                        </p>
+
+                        <p>
+                            <strong>💰 Pago:</strong>
+                            <span class="badge @(proyecto.EstadoPagoId == 1 ? "bg-success" : proyecto.EstadoPagoId == 2 ? "bg-warning" : "bg-danger")">
+                                @proyecto.EstadoPago.Nombre
+                            </span>
+                        </p>
+
+                        <p>
+                            <strong>📅 Inicio:</strong> @proyecto.FechaInicio.ToString("dd/MM/yyyy")
+                            <br />
+                            <strong>📅 Finalización:</strong> @(proyecto.FechaFinalizacion?.ToString("dd/MM/yyyy") ?? "N/A")
+                        </p>
+                        <p>
+                            <strong>👤 Cliente:</strong>
+                            @if (!string.IsNullOrEmpty(proyecto.UsuarioId))
+                            {
+                                <span class="badge bg-secondary">@proyecto.Usuario.UserName</span>
+                            }
+                            else
+                            {
+                                <span class="text-muted">No asignado</span>
+                            }
+                        </p>
+
+                        <p class="mb-2">
+                            <strong>📊 Progreso:</strong>
+                        </p>
+                        <div class="progress">
+                            <div class="progress-bar bg-success" role="progressbar" style="width: @(new Random().Next(10, 100))%;" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                        </div>
+
+                        <div class="text-end mt-3">
+                            <a asp-action="Details" asp-route-id="@proyecto.Id" class="btn btn-info btn-sm">👁 Ver</a>
+                            <a asp-action="Edit" asp-route-id="@proyecto.Id" class="btn btn-warning btn-sm">✏️ Editar</a>
+                            <a asp-action="Delete" asp-route-id="@proyecto.Id" class="btn btn-danger btn-sm">🗑 Eliminar</a>
+                            <a asp-action="Finanzas" asp-route-id="@proyecto.Id" class="btn btn-secondary btn-sm">💰 Finanzas</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>

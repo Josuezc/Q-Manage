@@ -1,0 +1,53 @@
+﻿@model Q_Manage.Models.Proyecto
+
+@{
+    ViewData["Title"] = "Eliminar Proyecto";
+}
+
+<div class="container mt-4 d-flex justify-content-center">
+    <div class="card bg-dark text-light p-4 shadow-lg" style="width: 40rem;">
+        <div class="card-header text-center">
+            <h2>❌ Eliminar Proyecto</h2>
+        </div>
+
+        <div class="card-body">
+            <p class="text-danger text-center">
+                ⚠️ ¿Estás seguro de que deseas eliminar este proyecto? Esta acción no se puede deshacer.
+            </p>
+
+            <dl class="row">
+                <dt class="col-sm-4">📌 Nombre</dt>
+                <dd class="col-sm-8">@Model.Nombre</dd>
+
+                <dt class="col-sm-4">📝 Descripción</dt>
+                <dd class="col-sm-8">@Model.Descripcion</dd>
+
+                <dt class="col-sm-4">📅 Fecha de Inicio</dt>
+                <dd class="col-sm-8">@Model.FechaInicio.ToString("dd/MM/yyyy")</dd>
+
+                <dt class="col-sm-4">📅 Fecha Finalización</dt>
+                <dd class="col-sm-8">
+                    @(Model.FechaFinalizacion?.ToString("dd/MM/yyyy") ?? "No definida")
+                </dd>
+
+                <dt class="col-sm-4">💰 Estado de Pago</dt>
+                <dd class="col-sm-8">
+                    <span class="badge @(Model.EstadoPagoId == 1 ? "bg-danger" : Model.EstadoPagoId == 2 ? "bg-warning" : "bg-success")">
+                        @Model.EstadoPago.Nombre
+                    </span>
+                </dd>
+
+                <dt class="col-sm-4">🛠 Estado del Proyecto</dt>
+                <dd class="col-sm-8"><span class="badge bg-primary">@Model.EstadoProyecto.Nombre</span></dd>
+            </dl>
+
+            <div class="text-center mt-4">
+                <form asp-action="Delete">
+                    <input type="hidden" asp-for="Id" />
+                    <button type="submit" class="btn btn-danger">❌ Eliminar</button>
+                    <a asp-action="Index" class="btn btn-secondary">↩️ Volver</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
