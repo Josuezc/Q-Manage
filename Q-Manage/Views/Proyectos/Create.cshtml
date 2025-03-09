@@ -55,13 +55,24 @@
                 </div>
                 <div class="mb-3">
                     <label class="form-label">👤 Seleccionar Cliente</label>
-                    <select asp-for="UsuarioId" class="form-select bg-dark text-light border-secondary">
-                        <option value="">-- Seleccionar Cliente --</option>
-                        @foreach (var cliente in ViewBag.Clientes)
-                        {
-                            <option value="@cliente.Id">@cliente.UserName - 📧 @cliente.Email</option>
-                        }
-                    </select>
+
+                    @if (ViewBag.Clientes == null || !((List<ApplicationUser>)ViewBag.Clientes).Any())
+                    {
+                        <div class="alert alert-warning text-dark">
+                            ⚠️ No hay clientes disponibles. Asegúrate de que hay usuarios con el rol "Client".
+                        </div>
+                    }
+                    else
+                    {
+                        <select asp-for="UsuarioId" class="form-select bg-dark text-light border-secondary" required>
+                            <option value="">-- Seleccionar Cliente --</option>
+                            @foreach (var cliente in ViewBag.Clientes)
+                            {
+                                <option value="@cliente.Id">@cliente.UserName - 📧 @cliente.Email</option>
+                            }
+                        </select>
+                        <span asp-validation-for="UsuarioId" class="text-danger"></span>
+                    }
                 </div>
 
 

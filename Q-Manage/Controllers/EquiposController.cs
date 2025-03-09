@@ -57,8 +57,14 @@ namespace Q_Manage.Controllers
 
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Equipos.ToListAsync());
+            var equipos = await _context.Equipos
+                .Include(e => e.empleadorPorEquipos)
+                .Include(e => e.ProyectosPorEquipos)
+                .ToListAsync();
+
+            return View(equipos ?? new List<Equipo>());
         }
+
 
         [HttpPost]
         [ValidateAntiForgeryToken]

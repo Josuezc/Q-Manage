@@ -20,17 +20,32 @@ public class ProyectosController : Controller
     private async Task<List<ApplicationUser>> ObtenerUsuariosPorRol(string roleName)
     {
         var role = await _context.Roles.FirstOrDefaultAsync(r => r.Name == roleName);
-        if (role == null) return new List<ApplicationUser>();
+
+        if (role == null)
+        {
+            Console.WriteLine($"⚠️ Rol '{roleName}' no encontrado en la base de datos.");
+            return new List<ApplicationUser>();
+        }
 
         var userIds = await _context.UserRoles
             .Where(ur => ur.RoleId == role.Id)
             .Select(ur => ur.UserId)
             .ToListAsync();
 
-        return await _context.Users
+        if (!userIds.Any())
+        {
+            Console.WriteLine($"⚠️ No hay usuarios con el rol '{roleName}'.");
+            return new List<ApplicationUser>();
+        }
+
+        var users = await _context.Users
             .Where(u => userIds.Contains(u.Id))
             .ToListAsync();
+
+        Console.WriteLine($"✅ Se encontraron {users.Count} usuarios con el rol '{roleName}'.");
+        return users;
     }
+
 
     public async Task<IActionResult> Index()
     {
@@ -73,7 +88,12 @@ public class ProyectosController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Nombre,Descripcion,FechaInicio,FechaFinalizacion,EstadoPagoId,EstadoProyectoId,UsuarioId")] Proyecto proyecto)
     {
-        if (!ModelState.IsValid)
+        if (string.IsNullOrEmpty(proyecto.UsuarioId))
+        {
+            ModelState.AddModelError("UsuarioId", "Debe seleccionar un cliente para el proyecto.");
+        }
+
+        if (ModelState.IsValid)
         {
             _context.Add(proyecto);
             await _context.SaveChangesAsync();
@@ -109,7 +129,12 @@ public class ProyectosController : Controller
     {
         if (id != proyecto.Id) return NotFound();
 
-        if (!ModelState.IsValid)
+        if (string.IsNullOrEmpty(proyecto.UsuarioId))
+        {
+            ModelState.AddModelError("UsuarioId", "Debe seleccionar un cliente para el proyecto.");
+        }
+
+        if (ModelState.IsValid)
         {
             try
             {
@@ -133,6 +158,7 @@ public class ProyectosController : Controller
 
         return View(proyecto);
     }
+
 
     public async Task<IActionResult> Delete(int? id)
     {

@@ -30,6 +30,18 @@
                 <p><strong>@comentario.Usuario.UserName:</strong> @comentario.Contenido</p>
             }
 
+            <h5>📊 Progreso del Proyecto</h5>
+            <p><strong>Progreso actual:</strong> @Model.Progreso%</p>
+
+            <div class="progress">
+                <div class="progress-bar @(Model.Progreso < 50 ? "bg-danger" : Model.Progreso < 80 ? "bg-warning" : "bg-success")"
+                     role="progressbar"
+                     style="width: @Model.Progreso%;"
+                     aria-valuenow="@Model.Progreso" aria-valuemin="0" aria-valuemax="100">
+                    @Model.Progreso%
+                </div>
+            </div>
+
             <hr class="bg-light" />
 
             <div class="text-center">
