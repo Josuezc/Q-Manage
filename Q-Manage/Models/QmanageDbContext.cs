@@ -21,7 +21,6 @@ namespace Q_Manage.Models
         public DbSet<EmpleadoPorEquipo> EmpleadoPorEquipos { get; set; }
         public DbSet<ProyectosPorEquipo> ProyectosPorEquipos { get; set; }
 
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             base.OnModelCreating(builder);

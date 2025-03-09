@@ -12,5 +12,7 @@ namespace Q_Manage.Models
         public string Description { get; set; }
 
         public List<EmpleadoPorEquipo> empleadorPorEquipos { get; set; } = new List<EmpleadoPorEquipo>();
+
+        public ICollection<ProyectosPorEquipo>? ProyectosPorEquipos { get; set; }
     }
 }
