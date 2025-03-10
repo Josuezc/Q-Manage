@@ -29,6 +29,12 @@ namespace Q_Manage.Models
                    .Property(p => p.Monto)
                    .HasPrecision(18, 2);
 
+            builder.Entity<Pago>()
+                   .HasOne(p => p.Proyecto)
+                   .WithMany(proj => proj.Pagos)
+                   .HasForeignKey(p => p.ProyectoId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
             builder.Entity<Comentario>()
                    .HasOne(c => c.Proyecto)
                    .WithMany(p => p.Comentarios)

@@ -79,7 +79,7 @@ public class ProyectosController : Controller
     {
         ViewBag.EstadosPago = await _context.EstadoPagos.ToListAsync();
         ViewBag.EstadosProyecto = await _context.EstadoProyectos.ToListAsync();
-        ViewBag.Clientes = await ObtenerUsuariosPorRol("Client"); // Cargar solo usuarios con rol Cliente
+        ViewBag.Clientes = await ObtenerUsuariosPorRol("Client");
 
         return View();
     }

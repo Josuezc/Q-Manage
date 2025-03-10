@@ -1,0 +1,78 @@
+﻿@model IEnumerable<Q_Manage.Models.Pago>
+@{
+    ViewData["Title"] = "Pagos del Proyecto";
+    var proyecto = ViewBag.Proyecto as Q_Manage.Models.Proyecto;
+    var totalPagos = Model.Sum(p => p.Monto);
+}
+
+@if (proyecto == null)
+{
+    <div class="alert alert-danger text-center">
+        ❌ Error: El proyecto no existe o no se ha seleccionado correctamente.
+    </div>
+}
+else
+{
+    <div class="container mt-4">
+        <h2 class="text-white text-center">💰 Pagos del Proyecto @proyecto.Nombre</h2>
+
+        <div class="card bg-dark text-light mb-4 p-3 shadow-lg text-center">
+            <h4 class="fw-bold">📊 Resumen Financiero</h4>
+            <p class="mb-1"><strong>Total de Pagos:</strong> <span class="text-info">$@totalPagos.ToString("N2")</span></p>
+        </div>
+
+        <div class="text-end mb-3">
+            <a asp-action="Create" asp-route-proyectoId="@proyecto.Id" class="btn btn-success">➕ Nuevo Pago</a>
+            <a asp-controller="Proyectos" asp-action="Index" class="btn btn-info">🔙 Volver a Proyectos</a>
+        </div>
+
+        <div class="row">
+            @foreach (var pago in Model)
+            {
+                <div class="col-lg-4 col-md-6 mb-4">
+                    <div class="card bg-dark text-white shadow-lg">
+                        <div class="card-header bg-primary text-center fw-bold">
+                            📄 Factura #@pago.Id
+                        </div>
+
+                        <div class="card-body">
+                            <p><strong>Monto:</strong> <span class="text-success">$@pago.Monto.ToString("N2")</span></p>
+                            <p><strong>Fecha Límite:</strong> @pago.FechaLimite.ToString("dd/MM/yyyy")</p>
+                            <p>
+                                <strong>Estado:</strong>
+                                <span class="badge @(pago.EstadoPagoId == 1 ? "bg-warning text-dark" : pago.EstadoPagoId == 2 ? "bg-success text-light" : "bg-danger text-dark")">
+                                    @pago.EstadoPago.Nombre
+                                </span>
+                            </p>
+
+                            @if (!string.IsNullOrEmpty(pago.Comprobante))
+                            {
+                                <a href="@pago.Comprobante" class="btn btn-light btn-sm" target="_blank">📎 Ver Comprobante</a>
+                            }
+                            else
+                            {
+                                <a asp-action="SubirComprobante" asp-route-id="@pago.Id" asp-route-proyectoId="@pago.ProyectoId" class="btn btn-secondary btn-sm">
+                                    ⬆️ Subir Comprobante
+                                </a>
+                            }
+
+                        </div>
+
+                        <div class="card-footer d-flex justify-content-between">
+                            <a asp-action="Details" asp-route-id="@pago.Id" asp-route-proyectoId="@pago.ProyectoId" class="btn btn-info btn-sm">
+                                👁️ Ver Detalles
+                            </a>
+                            <a asp-action="Edit" asp-route-id="@pago.Id" asp-route-proyectoId="@proyecto.Id" class="btn btn-warning btn-sm">
+                                ✏️ Editar
+                            </a>
+                            <a asp-action="Delete" asp-route-id="@pago.Id" asp-route-proyectoId="@pago.ProyectoId" class="btn btn-danger btn-sm">
+                                🗑️ Eliminar
+                            </a>
+                        </div>
+
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+}

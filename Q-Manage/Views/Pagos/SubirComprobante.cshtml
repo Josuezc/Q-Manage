@@ -1,0 +1,44 @@
+﻿@model Q_Manage.Models.Pago
+@{
+    ViewData["Title"] = "Subir Comprobante";
+    var proyectoId = ViewBag.Proyecto.Id;
+}
+
+<div class="container mt-4 d-flex justify-content-center">
+    <div class="card bg-dark text-light p-4 shadow-lg" style="width: 40rem;">
+        <div class="card-header text-center bg-primary">
+            <h2>📤 Subir Comprobante para Factura #@Model.Id</h2>
+        </div>
+
+        <div class="card-body">
+            <div class="mb-3 p-3 text-light">
+                <h5>💰 Información del Pago</h5>
+                <p><strong>Monto:</strong> $@Model.Monto</p>
+                <p><strong>Fecha Límite:</strong> @Model.FechaLimite.ToString("dd/MM/yyyy")</p>
+                <p>
+                    <strong>Estado Actual:</strong>
+                    <span class="badge @(Model.EstadoPagoId == 1 ? "bg-warning text-dark" : Model.EstadoPagoId == 2 ? "bg-danger text-light" : "bg-success text-dark")">
+                        @Model.EstadoPago.Nombre
+                    </span>
+                </p>
+            </div>
+
+            <form asp-action="SubirComprobante" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="id" value="@Model.Id" />
+                <input type="hidden" name="proyectoId" value="@Model.ProyectoId" />
+                <input type="hidden" name="EstadoPagoId" value="@Model.EstadoPagoId" />
+
+                <div class="mb-3">
+                    <label class="form-label">📎 Seleccionar Comprobante</label>
+                    <input type="file" name="file" class="form-control bg-dark text-light border-secondary" required />
+                </div>
+
+                <div class="text-center">
+                    <button type="submit" class="btn btn-success">📤 Subir</button>
+                    <a asp-action="Index" asp-route-proyectoId="@Model.ProyectoId" class="btn btn-secondary">🔙 Volver</a>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

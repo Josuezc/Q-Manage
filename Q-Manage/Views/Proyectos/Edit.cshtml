@@ -6,12 +6,12 @@
 
 <div class="container mt-4 d-flex justify-content-center">
     <div class="card bg-dark text-light p-4 shadow-lg" style="width: 40rem;">
-        <div class="card-header text-center">
+        <div class="card-header text-center bg-warning">
             <h2>✏️ Editar Proyecto</h2>
         </div>
 
         <div class="card-body">
-            <form asp-action="Edit">
+            <form asp-action="Edit" method="post">
                 <input type="hidden" asp-for="Id" />
 
                 <div class="mb-3">
@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="FechaFinalizacion" class="form-label">📅 Fecha de Finalización</label>
+                    <label asp-for="FechaFinalizacion" class="form-label">📅 Fecha de Finalización (Opcional)</label>
                     <input asp-for="FechaFinalizacion" type="date" class="form-control bg-dark text-light border-secondary" />
                 </div>
 
@@ -39,7 +39,7 @@
                     <select asp-for="EstadoPagoId" class="form-select bg-dark text-light border-secondary">
                         @foreach (var pago in ViewBag.EstadosPago)
                         {
-                            <option value="@pago.Id" selected="@(pago.Id == Model.EstadoPagoId ? "selected" : null)">@pago.Nombre</option>
+                            <option value="@pago.Id">@pago.Nombre</option>
                         }
                     </select>
                 </div>
@@ -49,38 +49,27 @@
                     <select asp-for="EstadoProyectoId" class="form-select bg-dark text-light border-secondary">
                         @foreach (var estado in ViewBag.EstadosProyecto)
                         {
-                            <option value="@estado.Id" selected="@(estado.Id == Model.EstadoProyectoId ? "selected" : null)">@estado.Nombre</option>
+                            <option value="@estado.Id">@estado.Nombre</option>
                         }
                     </select>
                 </div>
 
                 <div class="mb-3">
-                    <label class="form-label">👤 Cliente Asignado</label>
-
-                    @if (ViewBag.Clientes == null || !((List<ApplicationUser>)ViewBag.Clientes).Any())
-                    {
-                        <div class="alert alert-warning text-dark">
-                            ⚠️ No hay clientes disponibles. Asegúrate de que hay usuarios con el rol "Client".
-                        </div>
-                    }
-                    else
-                    {
-                        <select asp-for="UsuarioId" class="form-select bg-dark text-light border-secondary" required>
-                            <option value="">-- Seleccionar Cliente --</option>
-                            @foreach (var cliente in ViewBag.Clientes)
-                            {
-                                <option value="@cliente.Id" selected="@(cliente.Id == Model.UsuarioId ? "selected" : null)">
-                                    @cliente.UserName - 📧 @cliente.Email
-                                </option>
-                            }
-                        </select>
-                        <span asp-validation-for="UsuarioId" class="text-danger"></span>
-                    }
+                    <label class="form-label">👤 Seleccionar Cliente</label>
+                    <select asp-for="UsuarioId" class="form-select bg-dark text-light border-secondary">
+                        <option value="">-- Seleccionar Cliente --</option>
+                        @foreach (var cliente in ViewBag.Clientes)
+                        {
+                            <option value="@cliente.Id" selected="@(Model.UsuarioId == cliente.Id ? "selected" : null)">
+                                @cliente.UserName - 📧 @cliente.Email
+                            </option>
+                        }
+                    </select>
+                    <span asp-validation-for="UsuarioId" class="text-danger"></span>
                 </div>
 
-
                 <div class="text-center">
-                    <button type="submit" class="btn btn-success">💾 Guardar cambios</button>
+                    <button type="submit" class="btn btn-warning">💾 Guardar Cambios</button>
                     <a asp-action="Index" class="btn btn-secondary">↩️ Volver</a>
                 </div>
             </form>

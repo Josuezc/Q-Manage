@@ -12,8 +12,8 @@ using Q_Manage.Models;
 namespace Q_Manage.Migrations
 {
     [DbContext(typeof(QmanageDbContext))]
-    [Migration("20250301170623_Role")]
-    partial class Role
+    [Migration("20250310041039_FixFechaPagoNullable")]
+    partial class FixFechaPagoNullable
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,19 +54,19 @@ namespace Q_Manage.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "ce555a86-9908-4585-ba27-99726305ddac",
+                            Id = "dd155200-db85-4b0c-8d29-da689171d87e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "7f64e1f5-70d3-405e-95c6-425fa3df4395",
+                            Id = "e605c7f3-5a09-45de-8bcf-79b965c2a92b",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "165681a6-f708-41c0-9cd8-dab69b66434a",
+                            Id = "f033df82-36f7-4670-b8eb-af08cd557467",
                             Name = "Client",
                             NormalizedName = "CLIENT"
                         });
@@ -163,8 +163,8 @@ namespace Q_Manage.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "250807ea-f99f-43c5-a99e-f28356132c9d",
-                            RoleId = "ce555a86-9908-4585-ba27-99726305ddac"
+                            UserId = "96e35982-4148-4fe8-bcda-ff7fa9d37970",
+                            RoleId = "dd155200-db85-4b0c-8d29-da689171d87e"
                         });
                 });
 
@@ -256,17 +256,17 @@ namespace Q_Manage.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "250807ea-f99f-43c5-a99e-f28356132c9d",
+                            Id = "96e35982-4148-4fe8-bcda-ff7fa9d37970",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "b12457e9-dd0a-4bcb-8970-07828342c08d",
+                            ConcurrencyStamp = "5f2d10c1-3b7c-49e4-bad7-29ee14b4c941",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEMYrNPqxcDzxKhsJjLz4KhV40zL6rUgoKGJrZqMVlBVwFV7TG+NNWoGxNy2pGgjqvw==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEFyIwS4pKgjW1D9ST+gbSjLHFedH0Vb/7sBRuPkl/lVaZhTt7YCECehBroptTDtqoQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "0fc1b381-fd5e-4efe-bba9-008014c269a8",
+                            SecurityStamp = "8664db93-4c17-43e7-bbbd-d3b8c63699b6",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
@@ -395,22 +395,31 @@ namespace Q_Manage.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Comprobante")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("EstadoPagoId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FechaLimite")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaPago")
+                    b.Property<DateTime?>("FechaPago")
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Monto")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int?>("ProyectoId")
+                        .IsRequired()
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EstadoPagoId");
+
+                    b.HasIndex("ProyectoId");
 
                     b.ToTable("Pagos");
                 });
@@ -582,7 +591,15 @@ namespace Q_Manage.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Q_Manage.Models.Proyecto", "Proyecto")
+                        .WithMany("Pagos")
+                        .HasForeignKey("ProyectoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("EstadoPago");
+
+                    b.Navigation("Proyecto");
                 });
 
             modelBuilder.Entity("Q_Manage.Models.Proyecto", b =>
@@ -615,7 +632,7 @@ namespace Q_Manage.Migrations
             modelBuilder.Entity("Q_Manage.Models.ProyectosPorEquipo", b =>
                 {
                     b.HasOne("Q_Manage.Models.Equipo", "Equipo")
-                        .WithMany()
+                        .WithMany("ProyectosPorEquipos")
                         .HasForeignKey("EquipoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -647,6 +664,8 @@ namespace Q_Manage.Migrations
 
             modelBuilder.Entity("Q_Manage.Models.Equipo", b =>
                 {
+                    b.Navigation("ProyectosPorEquipos");
+
                     b.Navigation("empleadorPorEquipos");
                 });
 
@@ -665,6 +684,8 @@ namespace Q_Manage.Migrations
             modelBuilder.Entity("Q_Manage.Models.Proyecto", b =>
                 {
                     b.Navigation("Comentarios");
+
+                    b.Navigation("Pagos");
                 });
 #pragma warning restore 612, 618
         }

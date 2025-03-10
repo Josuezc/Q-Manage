@@ -12,8 +12,8 @@ using Q_Manage.Models;
 namespace Q_Manage.Migrations
 {
     [DbContext(typeof(QmanageDbContext))]
-    [Migration("20250301023251_userupdate")]
-    partial class userupdate
+    [Migration("20250310021814_InicialMigration")]
+    partial class InicialMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -54,15 +54,21 @@ namespace Q_Manage.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "6f8d88c6-7dac-4f96-be1a-25d90c87dfe5",
+                            Id = "ef18bffc-4341-4e57-8e05-a65843ad415e",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "70ddf93b-c7fa-4944-8139-b3a9ec0377a7",
-                            Name = "Usuario",
-                            NormalizedName = "USUARIO"
+                            Id = "daad7b8d-d18c-4a0c-9d13-03396aec8047",
+                            Name = "User",
+                            NormalizedName = "User"
+                        },
+                        new
+                        {
+                            Id = "3d0aa2c0-e4d8-44ac-9a72-48866c039f48",
+                            Name = "Client",
+                            NormalizedName = "CLIENT"
                         });
                 });
 
@@ -157,8 +163,8 @@ namespace Q_Manage.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "c11e832c-79a8-48ed-878d-19b6cc6dfecf",
-                            RoleId = "6f8d88c6-7dac-4f96-be1a-25d90c87dfe5"
+                            UserId = "bf261b50-f864-44ee-ad0b-5e005203d192",
+                            RoleId = "ef18bffc-4341-4e57-8e05-a65843ad415e"
                         });
                 });
 
@@ -250,17 +256,17 @@ namespace Q_Manage.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "c11e832c-79a8-48ed-878d-19b6cc6dfecf",
+                            Id = "bf261b50-f864-44ee-ad0b-5e005203d192",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "eb7f011c-a2ef-4583-86f0-f5ee8a6546bd",
+                            ConcurrencyStamp = "1a611129-f6a1-4b4d-8b84-0470a0a21078",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEA6/fNGofSMo0m3H2QlZ0lV9VBqQzTMHSL8BdSlGGOS3VXcj9rZWutHX68wdLQr0bg==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJoMWvdjcxzF0qZPUbR3a0kTsXb9pmZdyTPoT6GzTZZDu34D8/Xl4nvpk2nPluyCEg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "e6021059-8cec-49c9-9938-3c6deb4b4b8e",
+                            SecurityStamp = "053af163-30b9-4324-9667-b31cff8e1d8b",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         });
@@ -389,22 +395,31 @@ namespace Q_Manage.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Comprobante")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<int>("EstadoPagoId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("FechaLimite")
                         .HasColumnType("datetime2");
 
-                    b.Property<DateTime>("FechaPago")
+                    b.Property<DateTime?>("FechaPago")
+                        .IsRequired()
                         .HasColumnType("datetime2");
 
                     b.Property<decimal>("Monto")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("ProyectoId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("EstadoPagoId");
+
+                    b.HasIndex("ProyectoId");
 
                     b.ToTable("Pagos");
                 });
@@ -576,7 +591,15 @@ namespace Q_Manage.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("Q_Manage.Models.Proyecto", "Proyecto")
+                        .WithMany("Pagos")
+                        .HasForeignKey("ProyectoId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("EstadoPago");
+
+                    b.Navigation("Proyecto");
                 });
 
             modelBuilder.Entity("Q_Manage.Models.Proyecto", b =>
@@ -609,7 +632,7 @@ namespace Q_Manage.Migrations
             modelBuilder.Entity("Q_Manage.Models.ProyectosPorEquipo", b =>
                 {
                     b.HasOne("Q_Manage.Models.Equipo", "Equipo")
-                        .WithMany()
+                        .WithMany("ProyectosPorEquipos")
                         .HasForeignKey("EquipoId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -641,6 +664,8 @@ namespace Q_Manage.Migrations
 
             modelBuilder.Entity("Q_Manage.Models.Equipo", b =>
                 {
+                    b.Navigation("ProyectosPorEquipos");
+
                     b.Navigation("empleadorPorEquipos");
                 });
 
@@ -659,6 +684,8 @@ namespace Q_Manage.Migrations
             modelBuilder.Entity("Q_Manage.Models.Proyecto", b =>
                 {
                     b.Navigation("Comentarios");
+
+                    b.Navigation("Pagos");
                 });
 #pragma warning restore 612, 618
         }

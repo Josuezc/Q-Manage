@@ -1,3 +1,4 @@
+﻿using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -11,9 +12,6 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("QManage") ?? throw new InvalidOperationException("Connection string 'QManage' not found.");
 builder.Services.AddDbContext<QmanageDbContext>(options =>
     options.UseSqlServer(connectionString));
-
-
-
 
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 

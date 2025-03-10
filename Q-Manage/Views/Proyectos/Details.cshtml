@@ -1,53 +1,24 @@
 ﻿@model Q_Manage.Models.Proyecto
-
 @{
     ViewData["Title"] = "Detalles del Proyecto";
 }
 
-<div class="container mt-4">
-    <div class="card bg-dark text-light shadow-lg p-4">
+<div class="container mt-4 d-flex justify-content-center">
+    <div class="card bg-dark text-light p-4 shadow-lg" style="width: 40rem;">
         <div class="card-header text-center">
-            <h2>📂 @Model.Nombre</h2>
+            <h2>📂 Proyecto: @Model.Nombre</h2>
         </div>
 
         <div class="card-body">
-            <p>📝 <strong>Descripción:</strong> @Model.Descripcion</p>
-            <p>📅 <strong>Fecha de Inicio:</strong> @Model.FechaInicio.ToString("dd/MM/yyyy")</p>
-            <p>📅 <strong>Fecha Finalización:</strong> @(Model.FechaFinalizacion?.ToString("dd/MM/yyyy") ?? "No definida")</p>
-            <p>💰 <strong>Estado de Pago:</strong> @Model.EstadoPago.Nombre</p>
-            <p>🛠 <strong>Estado del Proyecto:</strong> @Model.EstadoProyecto.Nombre</p>
-
-            <hr class="bg-light" />
-            <h5>👤 Cliente Asignado</h5>
-            <p>
-                <strong>📌 Nombre:</strong> @Model.Usuario.UserName <br />
-                <strong>📧 Email:</strong> @Model.Usuario.Email
-            </p>
-
-            <h5>💬 Comentarios</h5>
-            @foreach (var comentario in Model.Comentarios)
-            {
-                <p><strong>@comentario.Usuario.UserName:</strong> @comentario.Contenido</p>
-            }
-
-            <h5>📊 Progreso del Proyecto</h5>
-            <p><strong>Progreso actual:</strong> @Model.Progreso%</p>
-
-            <div class="progress">
-                <div class="progress-bar @(Model.Progreso < 50 ? "bg-danger" : Model.Progreso < 80 ? "bg-warning" : "bg-success")"
-                     role="progressbar"
-                     style="width: @Model.Progreso%;"
-                     aria-valuenow="@Model.Progreso" aria-valuemin="0" aria-valuemax="100">
-                    @Model.Progreso%
-                </div>
-            </div>
-
-            <hr class="bg-light" />
+            <p><strong>📝 Descripción:</strong> @Model.Descripcion</p>
+            <p><strong>📅 Inicio:</strong> @Model.FechaInicio.ToString("dd/MM/yyyy")</p>
+            <p><strong>📅 Finalización:</strong> @(Model.FechaFinalizacion?.ToString("dd/MM/yyyy") ?? "N/A")</p>
+            <p><strong>💰 Estado de Pago:</strong> @Model.EstadoPago.Nombre</p>
+            <p><strong>🛠 Estado del Proyecto:</strong> @Model.EstadoProyecto.Nombre</p>
 
             <div class="text-center">
                 <a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-warning">✏️ Editar</a>
                 <a asp-action="Index" class="btn btn-secondary">↩️ Volver</a>
-                <a asp-action="Finanzas" asp-route-id="@Model.Id" class="btn btn-info">💰 Finanzas</a>
             </div>
         </div>
     </div>

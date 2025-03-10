@@ -1,0 +1,48 @@
+﻿@model Q_Manage.Models.Pago
+@{
+    ViewData["Title"] = "Detalles del Pago";
+    var proyecto = ViewBag.Proyecto as Q_Manage.Models.Proyecto;
+}
+
+@if (proyecto == null)
+{
+    <div class="alert alert-danger text-center">
+        ❌ Error: El proyecto no existe o no se ha seleccionado correctamente.
+    </div>
+}
+else
+{
+    <div class="container mt-4 d-flex justify-content-center">
+        <div class="card bg-dark text-light p-4 shadow-lg" style="width: 40rem;">
+            <div class="card-header text-center bg-primary">
+                <h2>📄 Detalles del Pago</h2>
+            </div>
+
+            <div class="card-body">
+                <p><strong>🔹 Proyecto:</strong> @proyecto.Nombre</p>
+                <p><strong>💵 Monto:</strong> $@Model.Monto</p>
+                <p><strong>📅 Fecha Límite:</strong> @Model.FechaLimite.ToString("dd/MM/yyyy")</p>
+
+                <p>
+                    <strong>📌 Estado:</strong>
+                    <span class="badge @(Model.EstadoPagoId == 1 ? "bg-warning text-dark" : Model.EstadoPagoId == 2 ? "bg-success text-light" : "bg-danger text-dark")">
+                        @Model.EstadoPago.Nombre
+                    </span>
+                </p>
+
+                @if (!string.IsNullOrEmpty(Model.Comprobante))
+                {
+                    <p><strong>📎 Comprobante:</strong> <a href="@Model.Comprobante" target="_blank" class="btn btn-light btn-sm">Ver Comprobante</a></p>
+                }
+                else
+                {
+                    <p><strong>📎 Comprobante:</strong> <span class="text-muted">No subido</span></p>
+                }
+            </div>
+
+            <div class="card-footer text-center">
+                <a asp-action="Index" asp-route-proyectoId="@proyecto.Id" class="btn btn-secondary">↩️ Volver</a>
+            </div>
+        </div>
+    </div>
+}

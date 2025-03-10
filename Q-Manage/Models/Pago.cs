@@ -14,14 +14,13 @@ namespace Q_Manage.Models
         [Required]
         public DateTime FechaLimite { get; set; }
 
-        [Required]
         public DateTime? FechaPago { get; set; }
 
-        [Required]
-        public int ProyectoId { get; set; }
+        [Required(ErrorMessage = "El proyecto es obligatorio.")]
+        public int? ProyectoId { get; set; }
 
         [ForeignKey("ProyectoId")]
-        public Proyecto Proyecto { get; set; }
+        public Proyecto? Proyecto { get; set; } = null!;
 
         public string? Comprobante { get; set; }
 
@@ -29,7 +28,7 @@ namespace Q_Manage.Models
         public int EstadoPagoId { get; set; }
 
         [ForeignKey("EstadoPagoId")]
-        public EstadoPago EstadoPago { get; set; }
+        public EstadoPago? EstadoPago { get; set; }
 
         public void ActualizarEstado()
         {

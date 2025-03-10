@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Q_Manage.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class InicialMigration : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -231,28 +231,6 @@ namespace Q_Manage.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Pagos",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Monto = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
-                    FechaLimite = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    FechaPago = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EstadoPagoId = table.Column<int>(type: "int", nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Pagos", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Pagos_EstadoPagos_EstadoPagoId",
-                        column: x => x.EstadoPagoId,
-                        principalTable: "EstadoPagos",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "Proyectos",
                 columns: table => new
                 {
@@ -318,6 +296,36 @@ namespace Q_Manage.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Pagos",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Monto = table.Column<decimal>(type: "decimal(18,2)", precision: 18, scale: 2, nullable: false),
+                    FechaLimite = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    FechaPago = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    ProyectoId = table.Column<int>(type: "int", nullable: false),
+                    Comprobante = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    EstadoPagoId = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Pagos", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Pagos_EstadoPagos_EstadoPagoId",
+                        column: x => x.EstadoPagoId,
+                        principalTable: "EstadoPagos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_Pagos_Proyectos_ProyectoId",
+                        column: x => x.ProyectoId,
+                        principalTable: "Proyectos",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProyectosPorEquipos",
                 columns: table => new
                 {
@@ -348,19 +356,20 @@ namespace Q_Manage.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "060b0758-c42f-480e-9840-440e3d3c97ca", null, "Usuario", "USUARIO" },
-                    { "e4b901d1-8086-4688-97ae-6b9737378200", null, "Admin", "ADMIN" }
+                    { "3d0aa2c0-e4d8-44ac-9a72-48866c039f48", null, "Client", "CLIENT" },
+                    { "daad7b8d-d18c-4a0c-9d13-03396aec8047", null, "User", "User" },
+                    { "ef18bffc-4341-4e57-8e05-a65843ad415e", null, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.InsertData(
                 table: "AspNetUsers",
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
-                values: new object[] { "1a94fcb8-49c5-484e-b1dc-eb4a6e7fb642", 0, "3eb85098-f72f-439a-abaf-e4770a846999", "admin@gmail.com", true, false, null, "ADMIN@GMAIL.COM", "ADMIN", "AQAAAAIAAYagAAAAEB4m/o3kVSR7tDeLGBFMYYmeNbZV8BSlU8/A/VzR6tDdnhR2BQ8vJhFy5oBQDra+GA==", null, false, "250a60e8-bfc9-4be4-863a-939bb3190d90", false, "admin" });
+                values: new object[] { "bf261b50-f864-44ee-ad0b-5e005203d192", 0, "1a611129-f6a1-4b4d-8b84-0470a0a21078", "admin@gmail.com", true, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEJoMWvdjcxzF0qZPUbR3a0kTsXb9pmZdyTPoT6GzTZZDu34D8/Xl4nvpk2nPluyCEg==", null, false, "053af163-30b9-4324-9667-b31cff8e1d8b", false, "admin@gmail.com" });
 
             migrationBuilder.InsertData(
                 table: "AspNetUserRoles",
                 columns: new[] { "RoleId", "UserId" },
-                values: new object[] { "e4b901d1-8086-4688-97ae-6b9737378200", "1a94fcb8-49c5-484e-b1dc-eb4a6e7fb642" });
+                values: new object[] { "ef18bffc-4341-4e57-8e05-a65843ad415e", "bf261b50-f864-44ee-ad0b-5e005203d192" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AspNetRoleClaims_RoleId",
@@ -430,6 +439,11 @@ namespace Q_Manage.Migrations
                 name: "IX_Pagos_EstadoPagoId",
                 table: "Pagos",
                 column: "EstadoPagoId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Pagos_ProyectoId",
+                table: "Pagos",
+                column: "ProyectoId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Proyectos_EstadoPagoId",

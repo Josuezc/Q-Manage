@@ -1,0 +1,49 @@
+﻿@model Q_Manage.Models.Pago
+@{
+    ViewData["Title"] = "Eliminar Pago";
+    var proyecto = ViewBag.Proyecto as Q_Manage.Models.Proyecto;
+}
+
+@if (proyecto == null)
+{
+    <div class="alert alert-danger text-center">
+        ❌ Error: El proyecto no existe o no se ha seleccionado correctamente.
+    </div>
+}
+else
+{
+    <div class="container mt-4 d-flex justify-content-center">
+        <div class="card bg-dark text-light p-4 shadow-lg" style="width: 40rem;">
+            <div class="card-header text-center bg-danger">
+                <h2>⚠️ Eliminar Pago</h2>
+            </div>
+
+            <div class="card-body">
+                <p class="text-center">
+                    ¿Estás seguro de que deseas eliminar la factura #@Model.Id del proyecto <strong>@proyecto.Nombre</strong>?
+                </p>
+
+                <ul class="list-group text-white">
+                    <li class="list-group-item bg-dark text-light border-secondary"><strong>💰 Monto:</strong> $@Model.Monto</li>
+                    <li class="list-group-item bg-dark text-light border-secondary"><strong>📅 Fecha Límite:</strong> @Model.FechaLimite.ToString("dd/MM/yyyy")</li>
+                    <li class="list-group-item bg-dark text-light border-secondary">
+                        <strong>📌 Estado:</strong>
+                        <span class="badge @(Model.EstadoPagoId == 1 ? "bg-warning text-dark" : Model.EstadoPagoId == 2 ? "bg-danger text-light" : "bg-success text-dark")">
+                            @Model.EstadoPago.Nombre
+                        </span>
+                    </li>
+                </ul>
+
+                <form asp-action="Delete" method="post">
+                    <input type="hidden" name="id" value="@Model.Id" />
+                    <input type="hidden" name="proyectoId" value="@proyecto.Id" />
+
+                    <div class="text-center mt-3">
+                        <button type="submit" class="btn btn-danger">🗑️ Confirmar Eliminación</button>
+                        <a asp-action="Index" asp-route-proyectoId="@proyecto.Id" class="btn btn-secondary">↩️ Cancelar</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+}
