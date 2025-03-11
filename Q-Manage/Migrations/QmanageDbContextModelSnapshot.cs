@@ -22,6 +22,62 @@ namespace Q_Manage.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("EstadoTarea", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("EstadosTarea");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Nombre = "Pendiente"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Nombre = "En progreso"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Nombre = "Completado"
+                        });
+                });
+
+            modelBuilder.Entity("Kanban", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("ProyectoId")
+                        .HasColumnType("int");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ProyectoId");
+
+                    b.ToTable("Kanbans");
+                });
+
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRole", b =>
                 {
                     b.Property<string>("Id")
@@ -51,19 +107,19 @@ namespace Q_Manage.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "dd155200-db85-4b0c-8d29-da689171d87e",
+                            Id = "1950bf34-6bdd-4d7e-a280-9d9ef3f7f8a7",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "e605c7f3-5a09-45de-8bcf-79b965c2a92b",
+                            Id = "f6a9a7f9-ec98-4443-9970-95b457fa5fd0",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "f033df82-36f7-4670-b8eb-af08cd557467",
+                            Id = "5d0f0ad2-337c-4252-b3ec-5999ebb0974b",
                             Name = "Client",
                             NormalizedName = "CLIENT"
                         });
@@ -160,8 +216,18 @@ namespace Q_Manage.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "96e35982-4148-4fe8-bcda-ff7fa9d37970",
-                            RoleId = "dd155200-db85-4b0c-8d29-da689171d87e"
+                            UserId = "d12fdb2a-e439-45fc-a981-1d8ff05d8c2a",
+                            RoleId = "1950bf34-6bdd-4d7e-a280-9d9ef3f7f8a7"
+                        },
+                        new
+                        {
+                            UserId = "df0e53c0-a7da-4103-b5f7-f0af4aad5608",
+                            RoleId = "5d0f0ad2-337c-4252-b3ec-5999ebb0974b"
+                        },
+                        new
+                        {
+                            UserId = "6a710e49-b621-4a86-8761-6e36ae644341",
+                            RoleId = "f6a9a7f9-ec98-4443-9970-95b457fa5fd0"
                         });
                 });
 
@@ -184,6 +250,45 @@ namespace Q_Manage.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens", (string)null);
+                });
+
+            modelBuilder.Entity("PrioridadTarea", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Nombre")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("PrioridadesTarea");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Nombre = "Baja"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Nombre = "Media"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Nombre = "Alta"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Nombre = "Urgente"
+                        });
                 });
 
             modelBuilder.Entity("Q_Manage.Models.ApplicationUser", b =>
@@ -253,19 +358,51 @@ namespace Q_Manage.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "96e35982-4148-4fe8-bcda-ff7fa9d37970",
+                            Id = "d12fdb2a-e439-45fc-a981-1d8ff05d8c2a",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "5f2d10c1-3b7c-49e4-bad7-29ee14b4c941",
+                            ConcurrencyStamp = "be2309f2-681e-4133-86b7-ae199d20507d",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEFyIwS4pKgjW1D9ST+gbSjLHFedH0Vb/7sBRuPkl/lVaZhTt7YCECehBroptTDtqoQ==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEP4yVwp5SFjqvMwkR8gvNTmMH+qCIPvn79w8c8Z4IMdD5aEdHHSuBkse/9pdZf5L4g==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "8664db93-4c17-43e7-bbbd-d3b8c63699b6",
+                            SecurityStamp = "2c26c54b-017c-4385-8da6-173348525184",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "df0e53c0-a7da-4103-b5f7-f0af4aad5608",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "76bf1e2f-6bc4-4ae2-be43-3c6674503b50",
+                            Email = "cliente@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "CLIENTE@GMAIL.COM",
+                            NormalizedUserName = "CLIENTE@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJSJ+PcQIsKaYWMg+WcuiT7JJjMlJwzksHsa8ql/vjug0qyynvT32HDruCjvVq1vMA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "986d08f3-ad88-4973-83e1-194b814d61f9",
+                            TwoFactorEnabled = false,
+                            UserName = "cliente@gmail.com"
+                        },
+                        new
+                        {
+                            Id = "6a710e49-b621-4a86-8761-6e36ae644341",
+                            AccessFailedCount = 0,
+                            ConcurrencyStamp = "52a28ea2-b566-4208-a907-aa44a8cdfc93",
+                            Email = "empleado@gmail.com",
+                            EmailConfirmed = true,
+                            LockoutEnabled = false,
+                            NormalizedEmail = "EMPLEADO@GMAIL.COM",
+                            NormalizedUserName = "EMPLEADO@GMAIL.COM",
+                            PasswordHash = "AQAAAAIAAYagAAAAEAkXMovIC897JH2stdtmn8a6Hk9FcbmdK9P3sdfK291726VjH/GkEHV6lHSMyBi6AA==",
+                            PhoneNumberConfirmed = false,
+                            SecurityStamp = "d5b1cf75-df15-4266-b801-9bffe9bce39a",
+                            TwoFactorEnabled = false,
+                            UserName = "empleado@gmail.com"
                         });
                 });
 
@@ -365,6 +502,23 @@ namespace Q_Manage.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EstadoPagos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Nombre = "Pendiente"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Nombre = "Pagado"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Nombre = "Atrasado"
+                        });
                 });
 
             modelBuilder.Entity("Q_Manage.Models.EstadoProyecto", b =>
@@ -382,6 +536,28 @@ namespace Q_Manage.Migrations
                     b.HasKey("Id");
 
                     b.ToTable("EstadoProyectos");
+
+                    b.HasData(
+                        new
+                        {
+                            Id = 1,
+                            Nombre = "Planificación"
+                        },
+                        new
+                        {
+                            Id = 2,
+                            Nombre = "Desarollo"
+                        },
+                        new
+                        {
+                            Id = 3,
+                            Nombre = "QA"
+                        },
+                        new
+                        {
+                            Id = 4,
+                            Nombre = "Producción"
+                        });
                 });
 
             modelBuilder.Entity("Q_Manage.Models.Pago", b =>
@@ -485,6 +661,58 @@ namespace Q_Manage.Migrations
                     b.HasIndex("ProyectoId");
 
                     b.ToTable("ProyectosPorEquipos");
+                });
+
+            modelBuilder.Entity("Tarea", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<string>("Descripcion")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("EstadoTareaId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("FechaCreacion")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime?>("FechaLimite")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("KanbanId")
+                        .HasColumnType("int");
+
+                    b.Property<int>("PrioridadTareaId")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Titulo")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EstadoTareaId");
+
+                    b.HasIndex("KanbanId");
+
+                    b.HasIndex("PrioridadTareaId");
+
+                    b.ToTable("Tareas");
+                });
+
+            modelBuilder.Entity("Kanban", b =>
+                {
+                    b.HasOne("Q_Manage.Models.Proyecto", "Proyecto")
+                        .WithMany()
+                        .HasForeignKey("ProyectoId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Proyecto");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
@@ -643,6 +871,38 @@ namespace Q_Manage.Migrations
                     b.Navigation("Equipo");
 
                     b.Navigation("Proyecto");
+                });
+
+            modelBuilder.Entity("Tarea", b =>
+                {
+                    b.HasOne("EstadoTarea", "EstadoTarea")
+                        .WithMany()
+                        .HasForeignKey("EstadoTareaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("Kanban", "Kanban")
+                        .WithMany("Tareas")
+                        .HasForeignKey("KanbanId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("PrioridadTarea", "PrioridadTarea")
+                        .WithMany()
+                        .HasForeignKey("PrioridadTareaId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("EstadoTarea");
+
+                    b.Navigation("Kanban");
+
+                    b.Navigation("PrioridadTarea");
+                });
+
+            modelBuilder.Entity("Kanban", b =>
+                {
+                    b.Navigation("Tareas");
                 });
 
             modelBuilder.Entity("Q_Manage.Models.ApplicationUser", b =>

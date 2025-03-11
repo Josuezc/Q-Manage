@@ -227,7 +227,6 @@ public class PagosController : Controller
                 return View();
             }
 
-            // 🔹 Verificar que el ID es válido
             if (id <= 0 || proyectoId <= 0)
             {
                 throw new Exception($"❌ ID inválido. PagoID: {id}, ProyectoID: {proyectoId}");
@@ -242,7 +241,6 @@ public class PagosController : Controller
 
             if (pago == null)
             {
-                // 🛑 Verificamos si al menos el pago existe, pero con otro ProyectoId
                 var pagoSinProyecto = await _context.Pagos.FirstOrDefaultAsync(p => p.Id == id);
                 if (pagoSinProyecto != null)
                 {

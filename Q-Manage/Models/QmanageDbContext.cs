@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using System.Reflection.Emit;
 using System.Security.Policy;
 
 namespace Q_Manage.Models
@@ -20,6 +21,11 @@ namespace Q_Manage.Models
         public DbSet<Comentario> Comentarios { get; set; }
         public DbSet<EmpleadoPorEquipo> EmpleadoPorEquipos { get; set; }
         public DbSet<ProyectosPorEquipo> ProyectosPorEquipos { get; set; }
+        public DbSet<Kanban> Kanbans { get; set; }
+        public DbSet<Tarea> Tareas { get; set; }
+        public DbSet<EstadoTarea> EstadosTarea { get; set; }
+        public DbSet<PrioridadTarea> PrioridadesTarea { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -44,6 +50,8 @@ namespace Q_Manage.Models
             string adminRoleId = Guid.NewGuid().ToString();
             string userRoleId = Guid.NewGuid().ToString();
             string clientRoleId = Guid.NewGuid().ToString();
+            string clienteUserId = Guid.NewGuid().ToString();
+            string empleadoUserId = Guid.NewGuid().ToString();
             string adminUserId = Guid.NewGuid().ToString();
 
             builder.Entity<IdentityRole>().HasData(
@@ -52,7 +60,32 @@ namespace Q_Manage.Models
                 new IdentityRole { Id = clientRoleId, Name = "Client", NormalizedName = "CLIENT" }
             );
 
-            // 🔹 Crear usuario administrador por defecto
+           builder.Entity<EstadoTarea>().HasData(
+                new EstadoTarea { Id = 1, Nombre = "Pendiente" },
+                new EstadoTarea { Id = 2, Nombre = "En progreso" },
+                new EstadoTarea { Id = 3, Nombre = "Completado" }
+            );
+
+            builder.Entity<PrioridadTarea>().HasData(
+                new PrioridadTarea { Id = 1, Nombre = "Baja" },
+                new PrioridadTarea { Id = 2, Nombre = "Media" },
+                new PrioridadTarea { Id = 3, Nombre = "Alta" },
+                new PrioridadTarea { Id = 4, Nombre = "Urgente" }
+            );
+
+            builder.Entity<EstadoPago>().HasData(
+                new EstadoPago { Id = 1, Nombre = "Pendiente" },
+                new EstadoPago { Id = 2, Nombre = "Pagado" },
+                new EstadoPago { Id = 3, Nombre = "Atrasado" }
+            );
+
+            builder.Entity<EstadoProyecto>().HasData(
+                new EstadoProyecto { Id = 1, Nombre = "Planificación" },
+                new EstadoProyecto { Id = 2, Nombre = "Desarollo" },
+                new EstadoProyecto { Id = 3, Nombre = "QA" },
+                new EstadoProyecto { Id = 4, Nombre = "Producción" }
+            );
+
             var adminUser = new ApplicationUser
             {
                 Id = adminUserId,
@@ -69,11 +102,43 @@ namespace Q_Manage.Models
 
             builder.Entity<ApplicationUser>().HasData(adminUser);
 
-            // 🔹 Asignar el usuario al rol de administrador
             builder.Entity<IdentityUserRole<string>>().HasData(
                 new IdentityUserRole<string> { UserId = adminUserId, RoleId = adminRoleId }
             );
 
+
+            var clienteUser = new ApplicationUser
+            {
+                Id = clienteUserId,
+                UserName = "cliente@gmail.com",
+                NormalizedUserName = "CLIENTE@GMAIL.COM",
+                Email = "cliente@gmail.com",
+                NormalizedEmail = "CLIENTE@GMAIL.COM",
+                EmailConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString()
+            };
+
+            clienteUser.PasswordHash = passwordHasher.HashPassword(clienteUser, "Password!2");
+            builder.Entity<ApplicationUser>().HasData(clienteUser);
+            builder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string> { UserId = clienteUserId, RoleId = clientRoleId }
+            );
+
+            var empleadoUser = new ApplicationUser
+            {
+                Id = empleadoUserId,
+                UserName = "empleado@gmail.com",
+                NormalizedUserName = "EMPLEADO@GMAIL.COM",
+                Email = "empleado@gmail.com",
+                NormalizedEmail = "EMPLEADO@GMAIL.COM",
+                EmailConfirmed = true,
+                SecurityStamp = Guid.NewGuid().ToString()
+            };
+            empleadoUser.PasswordHash = passwordHasher.HashPassword(empleadoUser, "Password!2");
+            builder.Entity<ApplicationUser>().HasData(empleadoUser);
+            builder.Entity<IdentityUserRole<string>>().HasData(
+                new IdentityUserRole<string> { UserId = empleadoUserId, RoleId = userRoleId }
+            );
         }
     }
 }
