@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-
+namespace Q_Manage.Models;
 public class EstadoTarea
 {
     [Key]

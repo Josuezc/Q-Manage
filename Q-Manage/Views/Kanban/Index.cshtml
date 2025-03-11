@@ -1,0 +1,128 @@
+﻿@model Q_Manage.Models.Kanban
+@{
+    ViewData["Title"] = "📌 Tablero Kanban";
+    var proyectoId = ViewBag.ProyectoId;
+}
+
+<div class="container mt-4">
+    <h2 class="text-center text-white">📌 Tablero Kanban</h2>
+
+    <div class="d-flex justify-content-between mb-3">
+        <a asp-controller="Proyectos" asp-action="Index" class="btn btn-info">🔙 Volver a Proyectos</a>
+        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearTareaModal">➕ Nueva Tarea</button>
+    </div>
+
+    <div id="kanban-container">
+        @await Html.PartialAsync("_ListaTareas", Model)
+    </div>
+</div>
+
+<div class="modal fade" id="crearTareaModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content bg-dark text-light">
+            <div class="modal-header">
+                <h5 class="modal-title">➕ Nueva Tarea</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form asp-action="CrearTarea" method="post">
+                <div class="modal-body">
+                    <input type="hidden" name="KanbanId" value="@Model.Id" />
+                    <input type="text" name="Titulo" class="form-control mb-2" placeholder="Título" required maxlength="50"/>
+                    <textarea name="Descripcion" class="form-control mb-2" style="min-height: 160px; max-height: 160px;" placeholder="Descripción" maxlength="255"></textarea>
+                    <select name="EstadoTareaId" class="form-select mb-2">
+                        @foreach (var estadoTarea in ViewBag.EstadosTarea as List<EstadoTarea>)
+                        {
+                            <option value="@estadoTarea.Id">@estadoTarea.Nombre</option>
+                        }
+                    </select>
+                    <select name="PrioridadTareaId" class="form-select">
+                        @foreach (var prioridad in ViewBag.PrioridadesTarea as List<PrioridadTarea>)
+                        {
+                            <option value="@prioridad.Id">@prioridad.Nombre</option>
+                        }
+                    </select>
+                </div>
+                <div class="modal-footer">
+                    <button type="submit" class="btn btn-success">➕ Agregar Tarea</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/ui/1.13.1/jquery-ui.js"></script>
+
+    <script>
+        function inicializarSortable() {
+            $(".estado-tarea").sortable({
+                connectWith: ".estado-tarea",
+                placeholder: "drag-placeholder",
+                cursor: "move",
+                forcePlaceholderSize: true,
+                update: function (event, ui) {
+                    var tareaId = ui.item.data("id");
+                    var nuevoEstadoId = ui.item.closest(".estado-tarea").data("estado-id");
+
+                    $.ajax({
+                        url: "/Kanban/ActualizarEstadoTarea",
+                        type: "POST",
+                        data: { id: tareaId, estadoTareaId: nuevoEstadoId },
+                        headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                        success: function (response) {
+                            $("#kanban-container").html(response);
+                            inicializarSortable();
+                        },
+                        error: function () {
+                            Swal.fire("❌ Error", "No se pudo actualizar el estado de la tarea.", "error");
+                        }
+                    });
+                }
+            }).disableSelection();
+        }
+
+        function eliminarTarea(id) {
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "Esta acción no se puede deshacer.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $.ajax({
+                        url: "/Kanban/EliminarTarea",
+                        type: "POST",
+                        data: { id: id },
+                        headers: { "RequestVerificationToken": $('input[name="__RequestVerificationToken"]').val() },
+                        success: function (response) {
+                            $("#kanban-container").html(response);
+                            inicializarSortable();
+                        },
+                        error: function (xhr) {
+                            let errorMessage = xhr.responseJSON?.message || "Error desconocido.";
+                            Swal.fire("Error", errorMessage, "error");
+                        }
+                    });
+                }
+            });
+        }
+
+        function toggleDropdown(element) {
+            let icon = element.querySelector('.dropdown-icon');
+            if (icon.classList.contains("bi-chevron-down")) {
+                icon.classList.replace("bi-chevron-down", "bi-chevron-up");
+            } else {
+                icon.classList.replace("bi-chevron-up", "bi-chevron-down");
+            }
+        }
+
+        $(document).ready(function () {
+            inicializarSortable();
+        });
+    </script>
+}

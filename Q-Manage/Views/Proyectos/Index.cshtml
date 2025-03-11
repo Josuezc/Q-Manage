@@ -74,7 +74,10 @@
                         <a asp-action="Edit" asp-route-id="@proyecto.Id" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>
                         <a asp-action="Delete" asp-route-id="@proyecto.Id" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Eliminar</a>
                         <a asp-controller="Pagos" asp-action="Index" asp-route-proyectoId="@proyecto.Id" class="btn btn-secondary btn-sm">
-                            💰 Finanzas
+                            Finanzas
+                        </a>
+                        <a asp-controller="Kanban" asp-action="Index" asp-route-proyectoId="@proyecto.Id" class="btn btn-info btn-sm">
+                            Kanban
                         </a>
                     </div>
                 </div>

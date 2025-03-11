@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿namespace Q_Manage.Models;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 public class Tarea
@@ -15,19 +16,19 @@ public class Tarea
     public int KanbanId { get; set; }
 
     [ForeignKey("KanbanId")]
-    public Kanban Kanban { get; set; }
+    public Kanban? Kanban { get; set; }
 
     [Required]
     public int EstadoTareaId { get; set; }
 
     [ForeignKey("EstadoTareaId")]
-    public EstadoTarea EstadoTarea { get; set; }
+    public EstadoTarea? EstadoTarea { get; set; }
 
     [Required]
     public int PrioridadTareaId { get; set; }
 
     [ForeignKey("PrioridadTareaId")]
-    public PrioridadTarea PrioridadTarea { get; set; }
+    public PrioridadTarea? PrioridadTarea { get; set; }
 
     public DateTime FechaCreacion { get; set; } = DateTime.Now;
     public DateTime? FechaLimite { get; set; }
