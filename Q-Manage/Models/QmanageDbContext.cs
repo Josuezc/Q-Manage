@@ -21,10 +21,10 @@ namespace Q_Manage.Models
         public DbSet<Comentario> Comentarios { get; set; }
         public DbSet<EmpleadoPorEquipo> EmpleadoPorEquipos { get; set; }
         public DbSet<ProyectosPorEquipo> ProyectosPorEquipos { get; set; }
+        public DbSet<Kanban> Kanbans { get; set; }
         public DbSet<Tarea> Tareas { get; set; }
         public DbSet<EstadoTarea> EstadosTarea { get; set; }
         public DbSet<PrioridadTarea> PrioridadesTarea { get; set; }
-        public DbSet<Kanban> Kanbans { get; set; }
 
 
         protected override void OnModelCreating(ModelBuilder builder)
