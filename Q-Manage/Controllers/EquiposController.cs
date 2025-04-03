@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -65,7 +66,7 @@ namespace Q_Manage.Controllers
             return View(equipos ?? new List<Equipo>());
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> AsignarProyecto(int equipoId, int proyectoId)
@@ -88,7 +89,7 @@ namespace Q_Manage.Controllers
             return RedirectToAction(nameof(Details), new { id = equipoId });
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DesasignarProyecto(int equipoId, int proyectoId)
@@ -105,7 +106,7 @@ namespace Q_Manage.Controllers
             return RedirectToAction(nameof(Details), new { id = equipoId });
         }
 
-
+        
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -131,7 +132,7 @@ namespace Q_Manage.Controllers
         }
 
 
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Create()
         {
             ViewBag.Usuarios = await ObtenerUsuariosParaEquipo("User");
@@ -164,7 +165,7 @@ namespace Q_Manage.Controllers
             ViewBag.Usuarios = await ObtenerUsuariosParaEquipo("User");
             return View(equipo);
         }
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Edit(int? id)
         {
             var equipo = await _context.Equipos
@@ -179,7 +180,7 @@ namespace Q_Manage.Controllers
             ViewBag.Usuarios = await ObtenerUsuariosParaEquipo("User", id);
             return View(equipo);
         }
-
+        [Authorize(Roles = "Admin")]
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -226,7 +227,7 @@ namespace Q_Manage.Controllers
             ViewBag.Usuarios = _context.Users.ToList();
             return View(equipo);
         }
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -249,7 +250,7 @@ namespace Q_Manage.Controllers
             return View(equipo);
         }
 
-
+        [Authorize(Roles = "Admin")]
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

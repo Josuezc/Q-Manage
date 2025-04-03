@@ -107,19 +107,19 @@ namespace Q_Manage.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "1950bf34-6bdd-4d7e-a280-9d9ef3f7f8a7",
+                            Id = "7a3c8a23-641e-4e5a-9bb0-f80fd8e68904",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = "f6a9a7f9-ec98-4443-9970-95b457fa5fd0",
+                            Id = "b3ac8411-d278-4f68-891f-0e895c9d5504",
                             Name = "User",
                             NormalizedName = "User"
                         },
                         new
                         {
-                            Id = "5d0f0ad2-337c-4252-b3ec-5999ebb0974b",
+                            Id = "8062b3ed-24dd-46cf-8e5c-2e52829d563b",
                             Name = "Client",
                             NormalizedName = "CLIENT"
                         });
@@ -216,18 +216,18 @@ namespace Q_Manage.Migrations
                     b.HasData(
                         new
                         {
-                            UserId = "d12fdb2a-e439-45fc-a981-1d8ff05d8c2a",
-                            RoleId = "1950bf34-6bdd-4d7e-a280-9d9ef3f7f8a7"
+                            UserId = "121cb147-3671-4862-9ebf-50348d1364ad",
+                            RoleId = "7a3c8a23-641e-4e5a-9bb0-f80fd8e68904"
                         },
                         new
                         {
-                            UserId = "df0e53c0-a7da-4103-b5f7-f0af4aad5608",
-                            RoleId = "5d0f0ad2-337c-4252-b3ec-5999ebb0974b"
+                            UserId = "f3e47131-2698-4533-b8f8-8dbfec49647c",
+                            RoleId = "8062b3ed-24dd-46cf-8e5c-2e52829d563b"
                         },
                         new
                         {
-                            UserId = "6a710e49-b621-4a86-8761-6e36ae644341",
-                            RoleId = "f6a9a7f9-ec98-4443-9970-95b457fa5fd0"
+                            UserId = "aedbed43-4ea1-4b33-99f8-5b381d582577",
+                            RoleId = "b3ac8411-d278-4f68-891f-0e895c9d5504"
                         });
                 });
 
@@ -358,49 +358,49 @@ namespace Q_Manage.Migrations
                     b.HasData(
                         new
                         {
-                            Id = "d12fdb2a-e439-45fc-a981-1d8ff05d8c2a",
+                            Id = "121cb147-3671-4862-9ebf-50348d1364ad",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "be2309f2-681e-4133-86b7-ae199d20507d",
+                            ConcurrencyStamp = "3f860f2f-4c02-47d5-9122-b49e9dfd3249",
                             Email = "admin@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "ADMIN@GMAIL.COM",
                             NormalizedUserName = "ADMIN@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEP4yVwp5SFjqvMwkR8gvNTmMH+qCIPvn79w8c8Z4IMdD5aEdHHSuBkse/9pdZf5L4g==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEGxOgQPCpYAvKti0963l9e2MLwJBKoOyzwK7cgl4KKxm1E3iH3RvmsDZfUe63uOPhg==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "2c26c54b-017c-4385-8da6-173348525184",
+                            SecurityStamp = "741637fd-17ab-4e16-940a-181f48d5f360",
                             TwoFactorEnabled = false,
                             UserName = "admin@gmail.com"
                         },
                         new
                         {
-                            Id = "df0e53c0-a7da-4103-b5f7-f0af4aad5608",
+                            Id = "f3e47131-2698-4533-b8f8-8dbfec49647c",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "76bf1e2f-6bc4-4ae2-be43-3c6674503b50",
+                            ConcurrencyStamp = "ec469646-f8c8-444c-9268-cb118ce63732",
                             Email = "cliente@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "CLIENTE@GMAIL.COM",
                             NormalizedUserName = "CLIENTE@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEJSJ+PcQIsKaYWMg+WcuiT7JJjMlJwzksHsa8ql/vjug0qyynvT32HDruCjvVq1vMA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEN+m/+qvu2Iigwbz+QGx5tyTfOo4FGATdF7ff4nYLfNKyM+zw8lS2Uv7D7aJXDJmgQ==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "986d08f3-ad88-4973-83e1-194b814d61f9",
+                            SecurityStamp = "f73e3f45-1022-46f3-bae3-de84ff6376c3",
                             TwoFactorEnabled = false,
                             UserName = "cliente@gmail.com"
                         },
                         new
                         {
-                            Id = "6a710e49-b621-4a86-8761-6e36ae644341",
+                            Id = "aedbed43-4ea1-4b33-99f8-5b381d582577",
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "52a28ea2-b566-4208-a907-aa44a8cdfc93",
+                            ConcurrencyStamp = "a0a67356-50dd-4fcb-b7f7-1106fb2dad7e",
                             Email = "empleado@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
                             NormalizedEmail = "EMPLEADO@GMAIL.COM",
                             NormalizedUserName = "EMPLEADO@GMAIL.COM",
-                            PasswordHash = "AQAAAAIAAYagAAAAEAkXMovIC897JH2stdtmn8a6Hk9FcbmdK9P3sdfK291726VjH/GkEHV6lHSMyBi6AA==",
+                            PasswordHash = "AQAAAAIAAYagAAAAEJvybeQyIQD8zRd0ZdYo+jLddSLKcS7Zjw0Cv9FSDFAWhf8Aa40ac9ul+1+eu9OJ6Q==",
                             PhoneNumberConfirmed = false,
-                            SecurityStamp = "d5b1cf75-df15-4266-b801-9bffe9bce39a",
+                            SecurityStamp = "b574b501-58fe-44c5-aef3-01a87b9a41b4",
                             TwoFactorEnabled = false,
                             UserName = "empleado@gmail.com"
                         });
@@ -663,7 +663,7 @@ namespace Q_Manage.Migrations
                     b.ToTable("ProyectosPorEquipos");
                 });
 
-            modelBuilder.Entity("Tarea", b =>
+            modelBuilder.Entity("Q_Manage.Models.Tarea", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -873,7 +873,7 @@ namespace Q_Manage.Migrations
                     b.Navigation("Proyecto");
                 });
 
-            modelBuilder.Entity("Tarea", b =>
+            modelBuilder.Entity("Q_Manage.Models.Tarea", b =>
                 {
                     b.HasOne("EstadoTarea", "EstadoTarea")
                         .WithMany()

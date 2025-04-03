@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace Q_Manage.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialMigration : Migration
+    public partial class app1 : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -439,9 +439,9 @@ namespace Q_Manage.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { "1950bf34-6bdd-4d7e-a280-9d9ef3f7f8a7", null, "Admin", "ADMIN" },
-                    { "5d0f0ad2-337c-4252-b3ec-5999ebb0974b", null, "Client", "CLIENT" },
-                    { "f6a9a7f9-ec98-4443-9970-95b457fa5fd0", null, "User", "User" }
+                    { "7a3c8a23-641e-4e5a-9bb0-f80fd8e68904", null, "Admin", "ADMIN" },
+                    { "8062b3ed-24dd-46cf-8e5c-2e52829d563b", null, "Client", "CLIENT" },
+                    { "b3ac8411-d278-4f68-891f-0e895c9d5504", null, "User", "User" }
                 });
 
             migrationBuilder.InsertData(
@@ -449,9 +449,9 @@ namespace Q_Manage.Migrations
                 columns: new[] { "Id", "AccessFailedCount", "ConcurrencyStamp", "Email", "EmailConfirmed", "LockoutEnabled", "LockoutEnd", "NormalizedEmail", "NormalizedUserName", "PasswordHash", "PhoneNumber", "PhoneNumberConfirmed", "SecurityStamp", "TwoFactorEnabled", "UserName" },
                 values: new object[,]
                 {
-                    { "6a710e49-b621-4a86-8761-6e36ae644341", 0, "52a28ea2-b566-4208-a907-aa44a8cdfc93", "empleado@gmail.com", true, false, null, "EMPLEADO@GMAIL.COM", "EMPLEADO@GMAIL.COM", "AQAAAAIAAYagAAAAEAkXMovIC897JH2stdtmn8a6Hk9FcbmdK9P3sdfK291726VjH/GkEHV6lHSMyBi6AA==", null, false, "d5b1cf75-df15-4266-b801-9bffe9bce39a", false, "empleado@gmail.com" },
-                    { "d12fdb2a-e439-45fc-a981-1d8ff05d8c2a", 0, "be2309f2-681e-4133-86b7-ae199d20507d", "admin@gmail.com", true, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEP4yVwp5SFjqvMwkR8gvNTmMH+qCIPvn79w8c8Z4IMdD5aEdHHSuBkse/9pdZf5L4g==", null, false, "2c26c54b-017c-4385-8da6-173348525184", false, "admin@gmail.com" },
-                    { "df0e53c0-a7da-4103-b5f7-f0af4aad5608", 0, "76bf1e2f-6bc4-4ae2-be43-3c6674503b50", "cliente@gmail.com", true, false, null, "CLIENTE@GMAIL.COM", "CLIENTE@GMAIL.COM", "AQAAAAIAAYagAAAAEJSJ+PcQIsKaYWMg+WcuiT7JJjMlJwzksHsa8ql/vjug0qyynvT32HDruCjvVq1vMA==", null, false, "986d08f3-ad88-4973-83e1-194b814d61f9", false, "cliente@gmail.com" }
+                    { "121cb147-3671-4862-9ebf-50348d1364ad", 0, "3f860f2f-4c02-47d5-9122-b49e9dfd3249", "admin@gmail.com", true, false, null, "ADMIN@GMAIL.COM", "ADMIN@GMAIL.COM", "AQAAAAIAAYagAAAAEGxOgQPCpYAvKti0963l9e2MLwJBKoOyzwK7cgl4KKxm1E3iH3RvmsDZfUe63uOPhg==", null, false, "741637fd-17ab-4e16-940a-181f48d5f360", false, "admin@gmail.com" },
+                    { "aedbed43-4ea1-4b33-99f8-5b381d582577", 0, "a0a67356-50dd-4fcb-b7f7-1106fb2dad7e", "empleado@gmail.com", true, false, null, "EMPLEADO@GMAIL.COM", "EMPLEADO@GMAIL.COM", "AQAAAAIAAYagAAAAEJvybeQyIQD8zRd0ZdYo+jLddSLKcS7Zjw0Cv9FSDFAWhf8Aa40ac9ul+1+eu9OJ6Q==", null, false, "b574b501-58fe-44c5-aef3-01a87b9a41b4", false, "empleado@gmail.com" },
+                    { "f3e47131-2698-4533-b8f8-8dbfec49647c", 0, "ec469646-f8c8-444c-9268-cb118ce63732", "cliente@gmail.com", true, false, null, "CLIENTE@GMAIL.COM", "CLIENTE@GMAIL.COM", "AQAAAAIAAYagAAAAEN+m/+qvu2Iigwbz+QGx5tyTfOo4FGATdF7ff4nYLfNKyM+zw8lS2Uv7D7aJXDJmgQ==", null, false, "f73e3f45-1022-46f3-bae3-de84ff6376c3", false, "cliente@gmail.com" }
                 });
 
             migrationBuilder.InsertData(
@@ -501,9 +501,9 @@ namespace Q_Manage.Migrations
                 columns: new[] { "RoleId", "UserId" },
                 values: new object[,]
                 {
-                    { "f6a9a7f9-ec98-4443-9970-95b457fa5fd0", "6a710e49-b621-4a86-8761-6e36ae644341" },
-                    { "1950bf34-6bdd-4d7e-a280-9d9ef3f7f8a7", "d12fdb2a-e439-45fc-a981-1d8ff05d8c2a" },
-                    { "5d0f0ad2-337c-4252-b3ec-5999ebb0974b", "df0e53c0-a7da-4103-b5f7-f0af4aad5608" }
+                    { "7a3c8a23-641e-4e5a-9bb0-f80fd8e68904", "121cb147-3671-4862-9ebf-50348d1364ad" },
+                    { "b3ac8411-d278-4f68-891f-0e895c9d5504", "aedbed43-4ea1-4b33-99f8-5b381d582577" },
+                    { "8062b3ed-24dd-46cf-8e5c-2e52829d563b", "f3e47131-2698-4533-b8f8-8dbfec49647c" }
                 });
 
             migrationBuilder.CreateIndex(

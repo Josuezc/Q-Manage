@@ -9,38 +9,131 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewData["Title"] - Q_Manage</title>
+
+    <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+
+    <!-- Estilos personalizados -->
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/Q_Manage.styles.css" asp-append-version="true" />
-</head>
-<body class="text-light" style="background-color: #112a46;">
 
+    <!-- Google Fonts & FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+    <style>
+        body {
+            background-color: #0d1b2a;
+            color: #e0e1dd;
+            font-family: 'Arial', sans-serif;
+        }
+
+        .navbar {
+            background: linear-gradient(45deg, #112a46, #1b3a5a);
+            padding: 15px;
+        }
+
+        .navbar-brand {
+            font-weight: bold;
+            font-size: 1.4rem;
+            color: #f4a261 !important;
+            transition: 0.3s;
+        }
+
+            .navbar-brand:hover {
+                color: #e76f51 !important;
+            }
+
+        .nav-link {
+            color: #e0e1dd !important;
+            font-weight: 500;
+            transition: 0.3s;
+        }
+
+            .nav-link:hover {
+                color: #f4a261 !important;
+            }
+
+        .container {
+            margin-top: 30px;
+        }
+
+        footer {
+            background: #112a46;
+            color: #e0e1dd;
+            padding: 20px 0;
+            margin-top: 50px;
+        }
+
+            footer a {
+                color: #f4a261;
+                transition: 0.3s;
+                text-decoration: none;
+            }
+
+                footer a:hover {
+                    color: #e76f51;
+                }
+
+        .social-icons a {
+            margin: 0 10px;
+            font-size: 20px;
+            color: #f4a261;
+            transition: 0.3s;
+        }
+
+            .social-icons a:hover {
+                color: #e76f51;
+            }
+    </style>
+</head>
+<body>
+
+    <!-- Navbar -->
     <header>
-        <nav class="navbar navbar-expand-lg navbar-dark shadow bg-dark">
+        <nav class="navbar navbar-expand-lg navbar-dark shadow">
             <div class="container-fluid">
-                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Q_Manage</a>
+                <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">
+                    <i class="fas fa-chart-line"></i> Q_Manage
+                </a>
                 <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 <div class="collapse navbar-collapse justify-content-between" id="navbarNav">
                     <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Index">Inicio</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-light" asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
-                        </li>
+                      
                         @if (User.IsInRole("Client"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Cliente" asp-action="Index">Estatus Cliente</a>
+                                <a class="nav-link" asp-area="" asp-controller="Cliente" asp-action="Index">
+                                    <i class="fas fa-user-tie"></i> Cliente
+                                </a>
                             </li>
                         }
                         @if (User.IsInRole("Admin") || User.IsInRole("User"))
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-light" asp-area="" asp-controller="Usuarios" asp-action="Index">Usuarios</a>
+                                <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index">
+                                    <i class="fas fa-users"></i> Usuarios
+                                </a>
                             </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Proyectos" asp-action="Index">
+                                    <i class="fas fa-folder-open"></i> Proyectos
+                                </a>
+                            </li>
+                        
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="Equipos" asp-action="Index">
+                                    <i class="fas fa-users-cog"></i> Equipos
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" asp-area="" asp-controller="ClienteVistaApi" asp-action="Index">
+                                    <i class="fas fa-users-cog"></i> Cliente
+                                </a>
+                            </li>
+                          
+                           
                         }
                     </ul>
                     <partial name="_LoginPartial" />
@@ -49,18 +142,29 @@
         </nav>
     </header>
 
-    <div class="container mt-5">
+    <!-- Contenido -->
+    <div class="container">
         <main role="main" class="pb-3">
             @RenderBody()
         </main>
     </div>
 
-    <footer class="bg-dark text-center text-light py-3 mt-5">
+    <!-- Footer -->
+    <footer class="text-center">
         <div class="container">
-            &copy; 2025 - Q_Manage - <a asp-area="" asp-controller="Home" asp-action="Privacy" class="text-light text-decoration-none">Privacidad</a>
+            <p>
+                &copy; 2025 - Q_Manage -
+                <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacidad</a>
+            </p>
+            <div class="social-icons">
+                <a href="#"><i class="fab fa-facebook"></i></a>
+                <a href="#"><i class="fab fa-twitter"></i></a>
+                <a href="#"><i class="fab fa-linkedin"></i></a>
+            </div>
         </div>
     </footer>
 
+    <!-- Scripts -->
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>

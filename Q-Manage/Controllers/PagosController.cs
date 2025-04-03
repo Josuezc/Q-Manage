@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Q_Manage.Models;
 using System;
@@ -53,7 +54,7 @@ public class PagosController : Controller
         return View(pago);
     }
 
-
+    [Authorize(Roles = "Admin")]
     [HttpGet]
     public async Task<IActionResult> Create(int proyectoId)
     {
@@ -71,7 +72,7 @@ public class PagosController : Controller
         ViewBag.Proyecto = proyecto;
         return View(new Pago { ProyectoId = proyectoId });
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("ProyectoId,Monto,FechaLimite")] Pago pago)
@@ -102,7 +103,7 @@ public class PagosController : Controller
         await _context.SaveChangesAsync();
         return RedirectToAction("Index", new { proyectoId = pago.ProyectoId });
     }
-
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(int id, int proyectoId)
     {
         var pago = await _context.Pagos.FirstOrDefaultAsync(p => p.Id == id && p.ProyectoId == proyectoId);
@@ -117,7 +118,7 @@ public class PagosController : Controller
 
         return View(pago);
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, [Bind("Id,Monto,FechaLimite,EstadoPagoId,ProyectoId")] Pago pago)
@@ -154,7 +155,7 @@ public class PagosController : Controller
             throw;
         }
     }
-
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int id, int proyectoId)
     {
         var pago = await _context.Pagos
@@ -169,7 +170,7 @@ public class PagosController : Controller
         ViewBag.Proyecto = await _context.Proyectos.FirstOrDefaultAsync(p => p.Id == proyectoId);
         return View(pago);
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id, int proyectoId)

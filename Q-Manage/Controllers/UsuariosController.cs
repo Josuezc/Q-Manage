@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace Q_Manage.Controllers
 {
+    [Authorize(Roles = "Admin")]
     public class UsuariosController : Controller
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -36,6 +37,7 @@ namespace Q_Manage.Controllers
                              .Include(e => e.Equipo)
                                  .ThenInclude(epe => epe.empleadorPorEquipos)
                                      .ThenInclude(u => u.Usuario)
+                                     
                                      .Where(e => e.Equipo.empleadorPorEquipos.Any(ep => ep.UsuarioId == userId))
                                      .Select(e => e.Proyecto.Nombre) 
                                      .Distinct()
@@ -46,7 +48,10 @@ namespace Q_Manage.Controllers
             }
             if (User.IsInRole("Admin"))
             {
-                var users = await _userManager.Users.Include(u => u.Proyectos).ToListAsync();
+
+                var admins = await _userManager.GetUsersInRoleAsync("Admin");
+                var users = await _userManager.GetUsersInRoleAsync("User");                
+                var usuarios = admins.Concat(users).Distinct().ToList();
                 var proyectosUsuarios = await _context.ProyectosPorEquipos
                  .Include(p => p.Proyecto)
                  .Include(e => e.Equipo)
@@ -61,7 +66,7 @@ namespace Q_Manage.Controllers
                  .ToDictionaryAsync(g => g.Key, g => g.Select(p => p.ProyectoNombre).Distinct().ToList()); 
 
                 ViewData["ProyectosUsuarios"] = proyectosUsuarios;
-                return View(users);
+                return View(usuarios);
             }
            
             return View();

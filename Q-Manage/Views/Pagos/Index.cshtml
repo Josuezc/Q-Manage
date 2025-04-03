@@ -22,7 +22,10 @@ else
         </div>
 
         <div class="text-end mb-3">
-            <a asp-action="Create" asp-route-proyectoId="@proyecto.Id" class="btn btn-success">➕ Nuevo Pago</a>
+            @if (User.IsInRole("Admin"))
+            {
+                <a asp-action="Create" asp-route-proyectoId="@proyecto.Id" class="btn btn-success">➕ Nuevo Pago</a>
+            }
             <a asp-controller="Proyectos" asp-action="Index" class="btn btn-info">🔙 Volver a Proyectos</a>
         </div>
 
@@ -62,12 +65,14 @@ else
                             <a asp-action="Details" asp-route-id="@pago.Id" asp-route-proyectoId="@pago.ProyectoId" class="btn btn-info btn-sm">
                                 👁️ Ver Detalles
                             </a>
-                            <a asp-action="Edit" asp-route-id="@pago.Id" asp-route-proyectoId="@proyecto.Id" class="btn btn-warning btn-sm">
-                                ✏️ Editar
-                            </a>
-                            <a asp-action="Delete" asp-route-id="@pago.Id" asp-route-proyectoId="@pago.ProyectoId" class="btn btn-danger btn-sm">
-                                🗑️ Eliminar
-                            </a>
+                            @if (User.IsInRole("Admin"))
+                            {
+                                <a asp-action="Edit" asp-route-id="@pago.Id" asp-route-proyectoId="@proyecto.Id" class="btn btn-warning btn-sm">
+                                    ✏️ Editar
+                                </a>
+                                <a asp-action="Delete" asp-route-id="@pago.Id" asp-route-proyectoId="@pago.ProyectoId" class="btn btn-danger btn-sm">
+                                    🗑️ Eliminar
+                            </a>}
                         </div>
 
                     </div>

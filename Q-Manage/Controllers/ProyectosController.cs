@@ -5,6 +5,7 @@ using Q_Manage.Models;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 
 public class ProyectosController : Controller
 {
@@ -57,7 +58,7 @@ public class ProyectosController : Controller
 
         return View(proyectos);
     }
-
+ 
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null) return NotFound();
@@ -74,7 +75,7 @@ public class ProyectosController : Controller
 
         return View(proyecto);
     }
-
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Create()
     {
         ViewBag.EstadosPago = await _context.EstadoPagos.ToListAsync();
@@ -83,7 +84,7 @@ public class ProyectosController : Controller
 
         return View();
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Create([Bind("Nombre,Descripcion,FechaInicio,FechaFinalizacion,EstadoPagoId,EstadoProyectoId,UsuarioId")] Proyecto proyecto)
@@ -92,14 +93,21 @@ public class ProyectosController : Controller
         {
             ModelState.AddModelError("UsuarioId", "Debe seleccionar un cliente para el proyecto.");
         }
-
         if (ModelState.IsValid)
         {
             _context.Add(proyecto);
             await _context.SaveChangesAsync();
+
+            var kanban = new Kanban
+            {
+                Nombre = $"Tablero de {proyecto.Nombre}",
+                ProyectoId = proyecto.Id
+            };
+            _context.Kanbans.Add(kanban);
+            await _context.SaveChangesAsync();
+
             return RedirectToAction(nameof(Index));
         }
-
         ViewBag.EstadosPago = await _context.EstadoPagos.ToListAsync();
         ViewBag.EstadosProyecto = await _context.EstadoProyectos.ToListAsync();
         ViewBag.Clientes = await ObtenerUsuariosPorRol("Client");
@@ -107,7 +115,7 @@ public class ProyectosController : Controller
         return View(proyecto);
     }
 
-
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Edit(int? id)
     {
         if (id == null) return NotFound();
@@ -122,7 +130,7 @@ public class ProyectosController : Controller
         return View(proyecto);
     }
 
-
+    [Authorize(Roles = "Admin")]
     [HttpPost]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> Edit(int id, [Bind("Id,Nombre,Descripcion,FechaInicio,FechaFinalizacion,EstadoPagoId,EstadoProyectoId,UsuarioId")] Proyecto proyecto)
@@ -159,7 +167,7 @@ public class ProyectosController : Controller
         return View(proyecto);
     }
 
-
+    [Authorize(Roles = "Admin")]
     public async Task<IActionResult> Delete(int? id)
     {
         if (id == null) return NotFound();
@@ -173,7 +181,7 @@ public class ProyectosController : Controller
 
         return View(proyecto);
     }
-
+    [Authorize(Roles = "Admin")]
     [HttpPost, ActionName("Delete")]
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
@@ -181,6 +189,12 @@ public class ProyectosController : Controller
         var proyecto = await _context.Proyectos.FindAsync(id);
         if (proyecto != null)
         {
+            var kanban = await _context.Kanbans.FirstOrDefaultAsync(k => k.ProyectoId == id);
+            if (kanban != null)
+            {
+                _context.Kanbans.Remove(kanban);
+            }
+
             _context.Proyectos.Remove(proyecto);
             await _context.SaveChangesAsync();
         }

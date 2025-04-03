@@ -6,11 +6,12 @@
 
 <div class="container mt-4">
     <h2 class="text-white text-center">📂 Gestión de Proyectos</h2>
-
+      @if (User.IsInRole("Admin"))
+                        {
     <div class="text-end mb-3">
         <a asp-action="Create" class="btn btn-success">➕ Nuevo Proyecto</a>
     </div>
-
+                        }
     <div class="row">
         @foreach (var proyecto in Model)
         {
@@ -71,10 +72,18 @@
 
                     <div class="card-footer d-flex justify-content-between">
                         <a asp-action="Details" asp-route-id="@proyecto.Id" class="btn btn-info btn-sm"><i class="fas fa-eye"></i> Ver</a>
+                        @if (User.IsInRole("Admin"))
+                        {
+                           
+                       
                         <a asp-action="Edit" asp-route-id="@proyecto.Id" class="btn btn-warning btn-sm"><i class="fas fa-edit"></i> Editar</a>
                         <a asp-action="Delete" asp-route-id="@proyecto.Id" class="btn btn-danger btn-sm"><i class="fas fa-trash"></i> Eliminar</a>
+                        }
                         <a asp-controller="Pagos" asp-action="Index" asp-route-proyectoId="@proyecto.Id" class="btn btn-secondary btn-sm">
-                            💰 Finanzas
+                            Finanzas
+                        </a>
+                        <a asp-controller="Kanban" asp-action="Index" asp-route-proyectoId="@proyecto.Id" class="btn btn-info btn-sm">
+                            Kanban
                         </a>
                     </div>
                 </div>

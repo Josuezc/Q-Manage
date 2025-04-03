@@ -1,6 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.AspNetCore.Http.HttpResults;
+using Microsoft.AspNetCore.OpenApi;
+using Microsoft.EntityFrameworkCore;
+using Q_Manage.Models;
 
 namespace Q_Manage.Models
 {
@@ -84,4 +88,68 @@ namespace Q_Manage.Models
 
         public List<Pago> Pagos { get; set; } = new List<Pago>();
     }
-}
+
+
+public static class ProyectoEndpoints
+{
+	public static void MapProyectoEndpoints (this IEndpointRouteBuilder routes)
+    {
+        var group = routes.MapGroup("/api/Proyecto").WithTags(nameof(Proyecto));
+
+        group.MapGet("/", async (QmanageDbContext db) =>
+        {
+            return await db.Proyectos.ToListAsync();
+        })
+        .WithName("GetAllProyectos")
+        .WithOpenApi();
+
+        group.MapGet("/{id}", async Task<Results<Ok<Proyecto>, NotFound>> (int id, QmanageDbContext db) =>
+        {
+            return await db.Proyectos.AsNoTracking()
+                .FirstOrDefaultAsync(model => model.Id == id)
+                is Proyecto model
+                    ? TypedResults.Ok(model)
+                    : TypedResults.NotFound();
+        })
+        .WithName("GetProyectoById")
+        .WithOpenApi();
+
+        group.MapPut("/{id}", async Task<Results<Ok, NotFound>> (int id, Proyecto proyecto, QmanageDbContext db) =>
+        {
+            var affected = await db.Proyectos
+                .Where(model => model.Id == id)
+                .ExecuteUpdateAsync(setters => setters
+                  .SetProperty(m => m.Id, proyecto.Id)
+                  .SetProperty(m => m.Nombre, proyecto.Nombre)
+                  .SetProperty(m => m.Descripcion, proyecto.Descripcion)
+                  .SetProperty(m => m.FechaInicio, proyecto.FechaInicio)
+                  .SetProperty(m => m.FechaFinalizacion, proyecto.FechaFinalizacion)
+                  .SetProperty(m => m.UsuarioId, proyecto.UsuarioId)
+                  .SetProperty(m => m.EstadoPagoId, proyecto.EstadoPagoId)
+                  .SetProperty(m => m.EstadoProyectoId, proyecto.EstadoProyectoId)
+                  );
+            return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
+        })
+        .WithName("UpdateProyecto")
+        .WithOpenApi();
+
+        group.MapPost("/", async (Proyecto proyecto, QmanageDbContext db) =>
+        {
+            db.Proyectos.Add(proyecto);
+            await db.SaveChangesAsync();
+            return TypedResults.Created($"/api/Proyecto/{proyecto.Id}",proyecto);
+        })
+        .WithName("CreateProyecto")
+        .WithOpenApi();
+
+        group.MapDelete("/{id}", async Task<Results<Ok, NotFound>> (int id, QmanageDbContext db) =>
+        {
+            var affected = await db.Proyectos
+                .Where(model => model.Id == id)
+                .ExecuteDeleteAsync();
+            return affected == 1 ? TypedResults.Ok() : TypedResults.NotFound();
+        })
+        .WithName("DeleteProyecto")
+        .WithOpenApi();
+    }
+}}
