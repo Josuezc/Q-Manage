@@ -109,13 +109,16 @@
                                 </a>
                             </li>
                         }
-                        @if (User.IsInRole("Admin") || User.IsInRole("User"))
+                        @if (User.IsInRole("Admin"))
                         {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Usuarios" asp-action="Index">
                                     <i class="fas fa-users"></i> Usuarios
                                 </a>
                             </li>
+                        }
+                            @if (User.IsInRole("Admin") || User.IsInRole("User"))
+                            {
                             <li class="nav-item">
                                 <a class="nav-link" asp-area="" asp-controller="Proyectos" asp-action="Index">
                                     <i class="fas fa-folder-open"></i> Proyectos

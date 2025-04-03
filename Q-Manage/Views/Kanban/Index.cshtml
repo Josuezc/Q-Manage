@@ -9,7 +9,11 @@
 
     <div class="d-flex justify-content-between mb-3">
         <a asp-controller="Proyectos" asp-action="Index" class="btn btn-info">🔙 Volver a Proyectos</a>
-        <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearTareaModal">➕ Nueva Tarea</button>
+        @if (User.IsInRole("Admin"))
+
+        {
+            <button class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearTareaModal">➕ Nueva Tarea</button>
+        }
     </div>
 
     <div id="kanban-container">
