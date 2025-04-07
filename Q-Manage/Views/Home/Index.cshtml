@@ -1,9 +1,71 @@
 ﻿@{
-    ViewData["Title"] = "Home Page";
+    ViewData["Title"] = "Dashboard";
+    var rol = ViewBag.Rol as string;
+    var proyectos = ViewBag.Proyectos as List<Q_Manage.Models.Proyecto>;
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<div class="container mt-5">
+    <h2 class="mb-4">Bienvenido - Rol: @rol</h2>
 
+    @if (rol == "Admin")
+    {
+        <div class="row mb-4">
+            <div class="col-md-4">
+                <div class="card bg-primary text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Total de Proyectos</h5>
+                        <p class="card-text">@ViewBag.TotalProyectos</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="card bg-success text-white">
+                    <div class="card-body">
+                        <h5 class="card-title">Costo Total</h5>
+                        <p class="card-text">₡@string.Format("{0:N2}", ViewBag.TotalPagos)</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+
+    @if (proyectos != null && proyectos.Any())
+    {
+        <div class="table-responsive">
+            <table class="table table-bordered">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Descripción</th>
+                        <th>Estado</th>
+                        <th>Estado de Pago</th>
+                        <th>Progreso</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var proyecto in proyectos)
+                    {
+                        <tr>
+                            <td>@proyecto.Nombre</td>
+                            <td>@proyecto.Descripcion</td>
+                            <td>@proyecto.EstadoProyecto?.Nombre</td>
+                            <td>@proyecto.EstadoPago?.Nombre</td>
+                            <td>
+                                <div class="progress">
+                                    <div class="progress-bar" style="width:@proyecto.Progreso%;" role="progressbar"
+                                         aria-valuenow="@proyecto.Progreso" aria-valuemin="0" aria-valuemax="100">
+                                        @proyecto.Progreso%
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    }
+    else
+    {
+        <p class="text-muted">No hay proyectos disponibles.</p>
+    }
+</div>
