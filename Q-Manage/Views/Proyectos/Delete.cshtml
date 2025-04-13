@@ -3,6 +3,13 @@
     ViewData["Title"] = "Eliminar Proyecto";
 }
 
+@if (TempData["ErrorEliminar"] != null)
+{
+    <div class="alert alert-danger text-center fw-bold">
+        @TempData["ErrorEliminar"]
+    </div>
+}
+
 <div class="container mt-4 d-flex justify-content-center">
     <div class="card bg-dark text-light p-4 shadow-lg" style="width: 40rem;">
         <div class="card-header text-center bg-danger">
@@ -13,6 +20,10 @@
             <p class="text-center">
                 ¿Estás seguro de que deseas eliminar el proyecto <strong>@Model.Nombre</strong>?
             </p>
+            <p class="text-center mt-3 text-warning">
+                ⚠️ Si el proyecto tiene pagos o comentarios relacionados, eliminálos antes de continuar.
+            </p>
+
 
             <ul class="list-group list-group-flush">
                 <li class="list-group-item bg-dark border-secondary text-white">

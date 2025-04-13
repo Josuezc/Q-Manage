@@ -186,18 +186,23 @@ public class ProyectosController : Controller
     [ValidateAntiForgeryToken]
     public async Task<IActionResult> DeleteConfirmed(int id)
     {
-        var proyecto = await _context.Proyectos.FindAsync(id);
-        if (proyecto != null)
-        {
-            var kanban = await _context.Kanbans.FirstOrDefaultAsync(k => k.ProyectoId == id);
-            if (kanban != null)
-            {
-                _context.Kanbans.Remove(kanban);
-            }
+        var proyecto = await _context.Proyectos
+            .Include(p => p.Pagos)
+            .Include(p => p.Comentarios)
+            .FirstOrDefaultAsync(p => p.Id == id);
 
-            _context.Proyectos.Remove(proyecto);
-            await _context.SaveChangesAsync();
+        if (proyecto == null)
+            return NotFound();
+
+        if (proyecto.Pagos?.Any() == true || proyecto.Comentarios?.Any() == true)
+        {
+            TempData["ErrorEliminar"] = "❌ No se puede eliminar el proyecto porque tiene elementos asociados. Elimine primero los pagos, comentarios u otras relaciones.";
+            return RedirectToAction(nameof(Delete), new { id });
         }
+
+        _context.Proyectos.Remove(proyecto);
+        await _context.SaveChangesAsync();
+
         return RedirectToAction(nameof(Index));
     }
 }

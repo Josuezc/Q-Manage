@@ -121,7 +121,7 @@ public class KanbanController : Controller
             return RedirectToAction("Index", new { proyectoId = tarea.Kanban.ProyectoId });
         }
     }
-    [Authorize(Roles = "Admin")]
+
     [HttpPost]
     public async Task<IActionResult> ActualizarEstadoTarea(int id, int estadoTareaId)
     {

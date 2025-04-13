@@ -4,73 +4,77 @@
     ViewData["Title"] = "Editar Usuario";
 }
 
-<h2>Editar Usuario</h2>
-
-<form asp-action="Edit" method="post">
-    <input type="hidden" asp-for="Id" />
-    @if (User.IsInRole("Admin"))
-    {
-        <div class="form-group">
-            <label asp-for="Email">Correo Electrónico</label>
-            <input asp-for="Email" class="form-control" required id="emailInput" />
-            <span asp-validation-for="Email" class="text-danger"></span>
+<div class="container mt-4 d-flex justify-content-center">
+    <div class="card bg-dark text-light p-4 shadow-lg" style="width: 40rem;">
+        <div class="card-header text-center">
+            <h2>✏️ Editar Usuario</h2>
         </div>
-    }
-    @if (User.IsInRole("User"))
-    {
-        <div class="form-group">
-            <label asp-for="Email">Correo Electrónico</label>
-        <input asp-for="Email" class="form-control" readonly id="emailInput" />
-        <span asp-validation-for="Email" class="text-danger"></span>
-    </div>}
 
-    <div class="form-group">
-      
-        <input type="hidden" asp-for="UserName" class="form-control" readonly id="usernameInput" />
-        <span asp-validation-for="UserName" class="text-danger"></span>
-    </div>
+        <div class="card-body">
+            <form asp-action="Edit" method="post">
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="UserName" class="form-control" id="usernameInput" />
 
-    <div class="form-group">
-        <label>Correo Electrónico Confirmado</label>
-        <div>
-           
-            <label>
-                <input type="radio" name="emailConfi" value="true" @(Model.EmailConfirmed ? "checked" : "") /> Sí
-            </label>
-            <label class="ms-3">
-                <input type="radio" name="emailConfi" value="false" @(!Model.EmailConfirmed ? "checked" : "") /> No
-            </label>
-        </div>
-        <span asp-validation-for="EmailConfirmed" class="text-danger"></span>
-    </div>
-
-
-    <div class="form-group">
-        <label for="phoneInput">Teléfono</label>       
-        <input asp-for="PhoneNumber" name="phone" class="form-control"  id="phoneInput" />
-    </div>
-
-    @if (User.IsInRole("Admin"))
-    {
-        <div class="form-group">
-            <label>Roles</label>
-            <select name="selectedRoles" class="form-control" multiple>
-                @foreach (var role in ViewData["Roles"] as List<SelectListItem>)
+                @if (User.IsInRole("Admin"))
                 {
-                    <option value="@role.Value" selected="@role.Selected">@role.Text</option>
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">📧 Correo Electrónico</label>
+                        <input asp-for="Email" class="form-control bg-dark text-light border-secondary" required id="emailInput" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
                 }
-            </select>
+                @if (User.IsInRole("User"))
+                {
+                    <div class="mb-3">
+                        <label asp-for="Email" class="form-label">📧 Correo Electrónico</label>
+                        <input asp-for="Email" class="form-control bg-dark text-light border-secondary" readonly id="emailInput" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                    </div>
+                }
+
+                <div class="mb-3">
+                    <label class="form-label">¿Correo Electrónico Confirmado?</label>
+                    <div>
+                        <label>
+                            <input type="radio" name="emailConfi" value="true" @(Model.EmailConfirmed ? "checked" : "") /> Sí
+                        </label>
+                        <label class="ms-3">
+                            <input type="radio" name="emailConfi" value="false" @(!Model.EmailConfirmed ? "checked" : "") /> No
+                        </label>
+                    </div>
+                    <span asp-validation-for="EmailConfirmed" class="text-danger"></span>
+                </div>
+
+                <div class="mb-3">
+                    <label for="phoneInput" class="form-label">Teléfono</label>
+                    <input asp-for="PhoneNumber" name="phone" class="form-control bg-dark text-light border-secondary" id="phoneInput" />
+                </div>
+
+                @if (User.IsInRole("Admin"))
+                {
+                    <div class="mb-3">
+                        <label class="form-label">Roles</label>
+                        <select name="selectedRoles" class="form-select bg-dark text-light border-secondary" multiple>
+                            @foreach (var role in ViewData["Roles"] as List<SelectListItem>)
+                            {
+                                <option value="@role.Value" selected="@role.Selected">@role.Text</option>
+                            }
+                        </select>
+                    </div>
+                }
+
+                <div class="text-center mt-4">
+                    <button type="submit" class="btn btn-warning px-4">Guardar Cambios</button>
+                    <a asp-action="Index" class="btn btn-secondary ms-2 px-4">Cancelar</a>
+                </div>
+            </form>
         </div>
-    }
-    <br />
-    <br />
-    <button type="submit" class="btn btn-primary">Guardar Cambios</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-</form>
+    </div>
+</div>
 
 @section Scripts {
     <script>
-        document.getElementById('emailInput').addEventListener('input', function() {
+        document.getElementById('emailInput')?.addEventListener('input', function () {
             document.getElementById('usernameInput').value = this.value;
         });
     </script>

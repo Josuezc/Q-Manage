@@ -13,7 +13,7 @@
     <a asp-action="Create" class="btn btn-primary">Nuevo Usuario</a>
 }
 <br />
-<table class="table">
+<table class="table mt-5">
     <thead>
         <tr>
             <th>Usuario</th>            
@@ -49,21 +49,6 @@
                     }
                 </td>}
                 <td>
-                    @if (proyectosUsuari != null && proyectosUsuari.Any())
-                    {
-                        <ul>
-                            @foreach (var proyecto in proyectosUsuari)
-                            {
-                                <li>@proyecto</li>
-                            }
-                        </ul>
-                    }
-                    else
-                    {
-                        <p>No hay proyectos asignados.</p>
-                    }
-                </td>
-                    <td>
 
                     <a asp-action="Edit" asp-route-id="@usuario.Id" class="btn btn-warning">Editar</a>
                     @if (User.IsInRole("Admin"))

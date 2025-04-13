@@ -4,11 +4,22 @@
     ViewData["Title"] = "Eliminar Usuario";
 }
 
-<h2>¿Está seguro de eliminar este usuario?</h2>
-<p>Email: @Model.Email</p>
+<div class="container mt-4 d-flex justify-content-center">
+    <div class="card bg-dark text-light p-4 shadow-lg" style="width: 40rem;">
+        <div class="card-header text-center bg-danger">
+            <h2>¡Confirmar Eliminación!</h2>
+        </div>
 
-<form asp-action="Delete" method="post">
-    <input type="hidden" asp-for="Id" />
-    <button type="submit" class="btn btn-danger">Eliminar</button>
-    <a asp-action="Index" class="btn btn-secondary">Cancelar</a>
-</form>
+        <div class="card-body text-center">
+            <p class="fs-5">¿Estás seguro de que querés eliminar este usuario?</p>
+            <p class="fw-bold">@Model.Email</p>
+
+            <form asp-action="Delete" method="post" class="d-flex justify-content-center gap-3 mt-4">
+                <input type="hidden" asp-for="Id" />
+
+                <button type="submit" class="btn btn-danger px-4">Eliminar</button>
+                <a asp-action="Index" class="btn btn-secondary px-4">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>

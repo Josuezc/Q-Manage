@@ -70,7 +70,11 @@ public class PagosController : Controller
         }
 
         ViewBag.Proyecto = proyecto;
-        return View(new Pago { ProyectoId = proyectoId });
+        return View(new Pago
+        {
+            ProyectoId = proyectoId,
+            FechaLimite = DateTime.Today.AddDays(7)
+        });
     }
     [Authorize(Roles = "Admin")]
     [HttpPost]
