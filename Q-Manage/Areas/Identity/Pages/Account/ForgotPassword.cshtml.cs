@@ -70,12 +70,18 @@ namespace Q_Manage.Areas.Identity.Pages.Account
                     pageHandler: null,
                     values: new { area = "Identity", code },
                     protocol: Request.Scheme);
-
+              
                 await _emailSender.SendEmailAsync(
                     Input.Email,
-                    "Reset Password",
-                    $"Please reset your password by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
-
+                    "Restablece tu contraseña",
+                    $@"<h3>Hola,</h3>
+                       <p>Recibimos una solicitud para restablecer tu contraseña. Si fuiste tú, por favor haz clic en el siguiente enlace:</p>
+                       <p><a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>Restablecer contraseña</a></p>
+                       <p>Si no solicitaste esto, puedes ignorar este mensaje. Tu contraseña seguirá siendo la misma.</p>
+                       <br>
+                       <p>Saludos,</p>
+                       <p><strong>El equipo de Qmanage</strong></p>");
+             
                 return RedirectToPage("./ForgotPasswordConfirmation");
             }
 
