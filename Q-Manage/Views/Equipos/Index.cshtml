@@ -7,9 +7,12 @@
 <div class="container mt-4">
     <h2 class="text-white text-center">👥 Gestión de Equipos</h2>
 
+    @if (User.IsInRole("Admin"))
+    {
     <div class="text-end mb-3">
         <a asp-action="Create" class="btn btn-success">➕ Nuevo Equipo</a>
     </div>
+    }
 
     <div class="row">
         @if (Model != null && Model.Any())

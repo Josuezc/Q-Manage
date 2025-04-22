@@ -72,11 +72,14 @@
                             }
                         </select>
                     </div>
+                    @if (User.IsInRole("Admin"))
+                    {
                     <div class="col-md-4 mt-1">
                         <button type="submit" class="btn btn-success h-100 w-50">
                             <i class="bi bi-check-circle"></i> Asignar
                         </button>
                     </div>
+                    }
                 </div>
             </form>
 
@@ -101,9 +104,12 @@
                                     <form asp-action="DesasignarProyecto" method="post">
                                         <input type="hidden" name="equipoId" value="@Model.Id" />
                                         <input type="hidden" name="proyectoId" value="@proyecto.Proyecto.Id" />
-                                        <button type="submit" class="btn btn-danger btn-sm">
-                                            <i class="bi bi-trash"></i> Eliminar
-                                        </button>
+                                        @if (User.IsInRole("Admin"))
+                                        {
+                                            <button type="submit" class="btn btn-danger btn-sm">
+                                                <i class="bi bi-trash"></i> Eliminar
+                                            </button>
+                                        }
                                     </form>
                                 </td>
                             </tr>
@@ -120,9 +126,12 @@
         </div>
 
         <div class="card-footer bg-dark border-top border-light d-flex justify-content-end gap-2">
+            @if (User.IsInRole("Admin"))
+            {
             <a asp-action="Edit" asp-route-id="@Model?.Id" class="btn btn-warning btn-sm">
                 <i class="bi bi-pencil-square"></i> Editar
             </a>
+            }
             <a asp-action="Index" class="btn btn-info btn-sm">
                 <i class="bi bi-arrow-left"></i> Volver a la lista
             </a>

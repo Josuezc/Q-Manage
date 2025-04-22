@@ -50,15 +50,48 @@ public class ProyectosController : Controller
 
     public async Task<IActionResult> Index()
     {
-        var proyectos = await _context.Proyectos
+        var user = await _userManager.GetUserAsync(User);
+
+        if (User.IsInRole("Admin"))
+        {
+            var todosProyectos = await _context.Proyectos
+                .Include(p => p.EstadoPago)
+                .Include(p => p.EstadoProyecto)
+                .Include(p => p.Usuario)
+                .ToListAsync();
+
+            return View(todosProyectos);
+        }
+
+        IQueryable<Proyecto> query = _context.Proyectos
             .Include(p => p.EstadoPago)
             .Include(p => p.EstadoProyecto)
-            .Include(p => p.Usuario)
-            .ToListAsync();
+            .Include(p => p.Usuario);
 
+        if (User.IsInRole("Client"))
+        {
+            // Solo proyectos asignados directamente al cliente
+            query = query.Where(p => p.UsuarioId == user.Id);
+        }
+        else if (User.IsInRole("User"))
+        {
+            // Obtener IDs de proyectos a los que tiene acceso el usuario por su(s) equipo(s)
+            var proyectoIds = await _context.EmpleadoPorEquipos
+                .Where(e => e.UsuarioId == user.Id)
+                .SelectMany(e => e.Equipo.ProyectosPorEquipos)
+                .Select(ppe => ppe.ProyectoId)
+                .Distinct()
+                .ToListAsync();
+
+            query = query.Where(p => proyectoIds.Contains(p.Id));
+        }
+
+        var proyectos = await query.ToListAsync();
         return View(proyectos);
     }
- 
+
+
+
     public async Task<IActionResult> Details(int? id)
     {
         if (id == null) return NotFound();

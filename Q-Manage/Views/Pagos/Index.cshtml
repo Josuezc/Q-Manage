@@ -54,9 +54,12 @@ else
                             }
                             else
                             {
-                                <a asp-action="SubirComprobante" asp-route-id="@pago.Id" asp-route-proyectoId="@pago.ProyectoId" class="btn btn-secondary btn-sm">
-                                    ⬆️ Subir Comprobante
-                                </a>
+                                @if (User.IsInRole("Admin"))
+                                {
+                                    <a asp-action="SubirComprobante" asp-route-id="@pago.Id" asp-route-proyectoId="@pago.ProyectoId" class="btn btn-secondary btn-sm">
+                                        ⬆️ Subir Comprobante
+                                    </a>
+                                }
                             }
 
                         </div>
